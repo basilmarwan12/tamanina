@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "429023634102",
+    "project_id": "tomanena-c97cd",
+    "storage_bucket": "tomanena-c97cd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429023634102:android:059223a80ac86aded2bc17",
+        "android_client_info": {
+          "package_name": "com.example.tamanina"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARaWUPFfUqK0_-5vmKaB2fXrqzsbHWpI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
