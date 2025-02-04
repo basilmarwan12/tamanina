@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tamanina/home_screen.dart';
 import 'package:tamanina/some_information_screen.dart';
 
 import 'add_data_of_nawpat.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: AddDataOfNawpat(),
+      child: HomeScreen(),
     );
   }
 }
