@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:tamanina/nawpat_screen.dart';
+import 'package:tamanina/profile_screen.dart';
+import 'package:tamanina/some_information_screen.dart';
+import 'package:tamanina/views/login/controller/login_controller.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+  final LoginController _loginController = Get.put(LoginController());
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +35,7 @@ class LoginScreen extends StatelessWidget {
                 height: 14.h,
               ),
               TextFormField(
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 textDirection: TextDirection.rtl,
                 style: TextStyle(color: Colors.black),
@@ -36,7 +45,7 @@ class LoginScreen extends StatelessWidget {
                     filled: true,
                     hintText: "البريد الالكتروني",
                     hintStyle: TextStyle(
-                      color: Color(0xffE5E8EF),
+                      color: Colors.blueGrey,
                     ),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -50,15 +59,17 @@ class LoginScreen extends StatelessWidget {
                 height: 14.h,
               ),
               TextFormField(
+                controller: _passwordController,
                 keyboardType: TextInputType.visiblePassword,
                 textDirection: TextDirection.rtl,
                 textAlign: TextAlign.right,
+                obscureText: true,
                 style: TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
                     hintText: "كلمة المرور",
-                    hintStyle: TextStyle(color: Color(0xffE5E8EF)),
+                    hintStyle: TextStyle(color: Colors.blueGrey),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide:
@@ -71,7 +82,13 @@ class LoginScreen extends StatelessWidget {
                 height: 17.h,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  if (await _loginController.login(
+                      email: _emailController.text,
+                      password: _passwordController.text)) {
+                    Get.offAll(() => ());
+                  } else {}
+                },
                 child: Container(
                   width: 200.w,
                   height: 60.h,
@@ -80,16 +97,28 @@ class LoginScreen extends StatelessWidget {
                       color: const Color(0xffA8BDD2),
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.circular(25)),
-                  child: Text(
-                    "تسجيل الدخول",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25.sp,
-                      fontWeight: FontWeight.normal,
-                    ),
+                  child: Obx(
+                    () => _loginController.isLoading()
+                        ? SizedBox(
+                            height: 25,
+                            width: 25,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor: Colors.blueGrey,
+                              strokeWidth: 1.5,
+                            ),
+                          )
+                        : Text(
+                            "تسجيل الدخول",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 25.sp,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

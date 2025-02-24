@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "D:/GrduateProject/tamanina/linux"
+    "cmake.sourceDirectory": "D:/GrduateProject/tamanina/linux",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

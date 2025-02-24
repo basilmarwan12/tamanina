@@ -51,19 +51,19 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyARaWUPFfUqK0_-5vmKaB2fXrqzsbHWpI4',
-    appId: '1:429023634102:android:059223a80ac86aded2bc17',
-    messagingSenderId: '429023634102',
-    projectId: 'tomanena-c97cd',
-    storageBucket: 'tomanena-c97cd.firebasestorage.app',
+    apiKey: 'AIzaSyC0BOLFN8djmCBkVnhUx5lgBWsLe_Nj9Yc',
+    appId: '1:48589627982:android:7859376d7a8e155fd2191f',
+    messagingSenderId: '48589627982',
+    projectId: 'tamanina-90d04',
+    storageBucket: 'tamanina-90d04.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBYsphgl3EQJpsNSn-j8f0PdAsbFWkju9Y',
-    appId: '1:429023634102:ios:11f8b449b37d5f33d2bc17',
-    messagingSenderId: '429023634102',
-    projectId: 'tomanena-c97cd',
-    storageBucket: 'tomanena-c97cd.firebasestorage.app',
+    apiKey: 'AIzaSyBL6U_m3eX_j3gMQQ97lB55gxwi8PSbm6c',
+    appId: '1:48589627982:ios:8fe5b5aa5be46cd9d2191f',
+    messagingSenderId: '48589627982',
+    projectId: 'tamanina-90d04',
+    storageBucket: 'tamanina-90d04.firebasestorage.app',
     iosBundleId: 'com.example.tamanina',
   );
 

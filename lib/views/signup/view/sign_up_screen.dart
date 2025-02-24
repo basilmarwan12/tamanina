@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:tamanina/views/login/view/login_screen.dart';
 import 'package:tamanina/nawpat_screen.dart';
+import 'package:tamanina/views/signup/controller/register_controller.dart';
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+  SignUpScreen({super.key});
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final RegisterController _controller = Get.put(RegisterController());
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +34,8 @@ class SignUpScreen extends StatelessWidget {
                 height: 14,
               ),
               TextFormField(
-                keyboardType: TextInputType.emailAddress,
+                controller: _nameController,
+                keyboardType: TextInputType.name,
                 textDirection: TextDirection.rtl,
                 style: TextStyle(color: Colors.black),
                 textAlign: TextAlign.right,
@@ -34,7 +44,7 @@ class SignUpScreen extends StatelessWidget {
                     filled: true,
                     hintText: "الاسم",
                     hintStyle: TextStyle(
-                      color: Color(0xffE5E8EF),
+                      color: Colors.blueGrey,
                     ),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -48,6 +58,7 @@ class SignUpScreen extends StatelessWidget {
                 height: 14,
               ),
               TextFormField(
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 textDirection: TextDirection.rtl,
                 style: TextStyle(color: Colors.black),
@@ -57,7 +68,7 @@ class SignUpScreen extends StatelessWidget {
                     filled: true,
                     hintText: "البريد الالكتروني",
                     hintStyle: TextStyle(
-                      color: Color(0xffE5E8EF),
+                      color: Colors.blueGrey,
                     ),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -71,6 +82,8 @@ class SignUpScreen extends StatelessWidget {
                 height: 14,
               ),
               TextFormField(
+                controller: _passwordController,
+                obscureText: true,
                 keyboardType: TextInputType.visiblePassword,
                 textDirection: TextDirection.rtl,
                 textAlign: TextAlign.right,
@@ -79,7 +92,9 @@ class SignUpScreen extends StatelessWidget {
                     fillColor: Colors.white,
                     filled: true,
                     hintText: "كلمة المرور",
-                    hintStyle: TextStyle(color: Color(0xffE5E8EF)),
+                    hintStyle: TextStyle(
+                      color: Colors.blueGrey,
+                    ),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide:
@@ -92,12 +107,12 @@ class SignUpScreen extends StatelessWidget {
                 height: 17,
               ),
               GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const NawpatScreen(),
-                    ),
-                  );
+                onTap: () async {
+                  await _controller.signUp(
+                      name: _nameController.text,
+                      email: _emailController.text,
+                      password: _passwordController.text);
+                  Get.to(() => LoginScreen());
                 },
                 child: Container(
                   width: 200,
@@ -107,15 +122,30 @@ class SignUpScreen extends StatelessWidget {
                       color: const Color(0xffA8BDD2),
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.circular(25)),
-                  child: const Text(
-                    "انشاء حساب",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25,
-                      fontWeight: FontWeight.normal,
-                    ),
+                  child: Obx(
+                    () => _controller.isLoading()
+                        ? SizedBox(
+                            height: 25,
+                            width: 25,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor: Colors.blueGrey,
+                              strokeWidth: 1.5,
+                            ),
+                          )
+                        : const Text(
+                            "انشاء حساب",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 25,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 70,
               )
             ],
           ),

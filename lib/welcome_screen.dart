@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tamanina/login_screen.dart';
-import 'package:tamanina/sign_up_screen.dart';
+import 'package:tamanina/views/login/view/login_screen.dart';
+import 'package:tamanina/views/signup/view/sign_up_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -24,7 +24,7 @@ class WelcomeScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
+                      builder: (context) => LoginScreen(),
                     ),
                   );
                 },
@@ -37,7 +37,7 @@ class WelcomeScreen extends StatelessWidget {
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.circular(25)),
                   child: const Text(
-                    "مريض",
+                    "تسجيل الدخول",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 25,
@@ -53,7 +53,7 @@ class WelcomeScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const SignUpScreen(),
+                      builder: (context) => SignUpScreen(),
                     ),
                   );
                 },
@@ -66,7 +66,7 @@ class WelcomeScreen extends StatelessWidget {
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.circular(25)),
                   child: const Text(
-                    "زائر",
+                    "انشاء حساب ؟",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 25,

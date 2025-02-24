@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:tamanina/views/login/view/login_screen.dart';
+import 'package:tamanina/nawpat_screen.dart';
+import 'package:tamanina/views/signup/view/sign_up_screen.dart';
 import 'package:tamanina/some_information_screen.dart';
+import 'package:tamanina/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+import 'welcome_screen.dart';
 
 void main() async {
   await ScreenUtil.ensureScreenSize();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -18,7 +30,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) {
-        return MaterialApp(
+        return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           locale: const Locale('ar'), // Force Arabic language
           supportedLocales: const [
@@ -38,7 +50,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: SomeInformationScreen(),
+      child: WelcomeScreen(),
     );
   }
 }
