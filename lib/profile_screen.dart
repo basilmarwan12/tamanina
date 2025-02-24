@@ -8,7 +8,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffECEFF5),
+      backgroundColor:  Colors.white,
       body: Container(
         child: SingleChildScrollView(
           child: Column(
@@ -42,24 +42,24 @@ class ProfileScreen extends StatelessWidget {
                   horizontal: 20.w,
                 ),
                 child: TextFormField(
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.text,
                   textDirection: TextDirection.rtl,
                   style: TextStyle(color: Colors.black),
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
-                      fillColor: Colors.white,
+                      fillColor: Color(0xffF3F4F6),
                       filled: true,
                       hintText: "الاسم الاول",
                       hintStyle: TextStyle(
-                        color: Color(0xffE5E8EF),
+                        color: Colors.blueGrey,
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide:
-                              BorderSide(color: Color(0xff000000), width: 2)),
+                              BorderSide.none),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.green))),
+                          borderSide: BorderSide.none)),
                 ),
               ),
               SizedBox(
@@ -70,24 +70,24 @@ class ProfileScreen extends StatelessWidget {
                   horizontal: 20.w,
                 ),
                 child: TextFormField(
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.text,
                   textDirection: TextDirection.rtl,
                   style: TextStyle(color: Colors.black),
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
-                      fillColor: Colors.white,
+                      fillColor: Color(0xffF3F4F6),
                       filled: true,
                       hintText: "الاسم الثاني",
                       hintStyle: TextStyle(
-                        color: Color(0xffE5E8EF),
+                        color: Colors.blueGrey,
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide:
-                              BorderSide(color: Color(0xff000000), width: 2)),
+                              BorderSide.none),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.green))),
+                          borderSide: BorderSide.none)),
                 ),
               ),
               SizedBox(
@@ -103,19 +103,19 @@ class ProfileScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.black),
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
-                      fillColor: Colors.white,
+                      fillColor: Color(0xffF3F4F6),
                       filled: true,
                       hintText: "البريد الالكتروني",
                       hintStyle: TextStyle(
-                        color: Color(0xffE5E8EF),
+                        color: Colors.blueGrey,
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide:
-                              BorderSide(color: Color(0xff000000), width: 2)),
+                              BorderSide.none),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.green))),
+                          borderSide: BorderSide.none)),
                 ),
               ),
               SizedBox(
@@ -126,24 +126,24 @@ class ProfileScreen extends StatelessWidget {
                   horizontal: 20.w,
                 ),
                 child: TextFormField(
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.text,
                   textDirection: TextDirection.rtl,
                   style: TextStyle(color: Colors.black),
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
-                      fillColor: Colors.white,
+                      fillColor: Color(0xffF3F4F6),
                       filled: true,
                       hintText: "بداية النوبات",
                       hintStyle: TextStyle(
-                        color: Color(0xffE5E8EF),
+                        color: Colors.blueGrey,
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide:
-                              BorderSide(color: Color(0xff000000), width: 2)),
+                              BorderSide.none),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.green))),
+                          borderSide: BorderSide.none)),
                 ),
               ),
               SizedBox(
@@ -159,19 +159,19 @@ class ProfileScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.black),
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
-                      fillColor: Colors.white,
+                      fillColor: Color(0xffF3F4F6),
                       filled: true,
                       hintText: "عدد مرات الحدوث",
                       hintStyle: TextStyle(
-                        color: Color(0xffE5E8EF),
+                        color: Colors.blueGrey,
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide:
-                              BorderSide(color: Color(0xff000000), width: 2)),
+                              BorderSide.none),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.green))),
+                          borderSide: BorderSide.none)),
                 ),
               ),
               SizedBox(
@@ -187,19 +187,19 @@ class ProfileScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.black),
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
-                      fillColor: Colors.white,
+                      fillColor: Color(0xffF3F4F6),
                       filled: true,
                       hintText: "بداية النوبات",
                       hintStyle: TextStyle(
-                        color: Color(0xffE5E8EF),
+                        color: Colors.blueGrey,
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide:
-                              BorderSide(color: Color(0xff000000), width: 2)),
+                              BorderSide.none),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.green))),
+                          borderSide: BorderSide.none)),
                 ),
               ),
               SizedBox(
@@ -215,19 +215,19 @@ class ProfileScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.black),
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
-                      fillColor: Colors.white,
+                      fillColor: Color(0xffF3F4F6),
                       filled: true,
                       hintText: "النوع",
                       hintStyle: TextStyle(
-                        color: Color(0xffE5E8EF),
+                        color: Colors.blueGrey,
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide:
-                              BorderSide(color: Color(0xff000000), width: 2)),
+                              BorderSide.none),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.green))),
+                          borderSide: BorderSide.none)),
                 ),
               ),
               SizedBox(
