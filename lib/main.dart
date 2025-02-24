@@ -2,17 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:tamanina/views/login/view/login_screen.dart';
-import 'package:tamanina/nawpat_screen.dart';
-import 'package:tamanina/views/signup/view/sign_up_screen.dart';
-import 'package:tamanina/some_information_screen.dart';
-import 'package:tamanina/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 import 'welcome_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -32,25 +28,34 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          locale: const Locale('ar'), // Force Arabic language
-          supportedLocales: const [
-            Locale('ar'), // Only Arabic
+          title: 'Tamanina',
+          locale: Locale('ar', 'EG'),
+          supportedLocales: [
+            Locale('en', 'US'),
+            Locale('ar', 'EG'),
           ],
-          localizationsDelegates: const [
+          localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          title: 'Flutter Demo',
-          // You can use the library anywhere in the app even in theme
+          localeResolutionCallback: (locale, supportedLocales) {
+            return locale ?? supportedLocales.first;
+          },
+          builder: (context, child) {
+            return Directionality(
+              textDirection: TextDirection.rtl,
+              child: child!,
+            );
+          },
           theme: ThemeData(
             primarySwatch: Colors.blue,
+            fontFamily: 'Cairo',
             textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
           ),
-          home: child,
+          home: WelcomeScreen(),
         );
       },
-      child: WelcomeScreen(),
     );
   }
 }

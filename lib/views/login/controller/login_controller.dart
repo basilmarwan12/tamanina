@@ -22,7 +22,7 @@ class LoginController extends GetxController {
 
       User? user = userCredential.user;
 
-      if (user != null) {
+      if (user != null && user.emailVerified) {
         _service.login(user);
         Get.snackbar("نجاح", "تم تسجيل الدخول بنجاح!",
             backgroundColor: Colors.green);

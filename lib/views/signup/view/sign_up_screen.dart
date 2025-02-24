@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/views/login/view/login_screen.dart';
-import 'package:tamanina/nawpat_screen.dart';
 import 'package:tamanina/views/signup/controller/register_controller.dart';
+
+import '../../../welcome_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
@@ -16,6 +17,18 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xffECEFF5),
+        leading: SizedBox(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_forward),
+            onPressed: () {
+              Get.to(() => WelcomeScreen());
+            },
+          ),
+        ],
+      ),
       backgroundColor: const Color(0xffECEFF5),
       body: SingleChildScrollView(
         child: Padding(

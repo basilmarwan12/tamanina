@@ -31,7 +31,7 @@ class RegisterController extends GetxController {
           "email": email,
           "createdAt": DateTime.now(),
         });
-
+        await user.sendEmailVerification();
         Get.snackbar("Success", "Account created successfully!");
       }
     } on FirebaseAuthException catch (e) {

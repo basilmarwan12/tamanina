@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:tamanina/home_screen.dart';
 import 'package:tamanina/nawpat_screen.dart';
 import 'package:tamanina/profile_screen.dart';
 import 'package:tamanina/some_information_screen.dart';
 import 'package:tamanina/views/login/controller/login_controller.dart';
+import 'package:tamanina/welcome_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -15,7 +17,18 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffECEFF5),
+      appBar: AppBar(
+        backgroundColor: const Color(0xffECEFF5),
+        leading: SizedBox(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_forward),
+            onPressed: () {
+              Get.to(() => WelcomeScreen());
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 10.h),
@@ -86,7 +99,7 @@ class LoginScreen extends StatelessWidget {
                   if (await _loginController.login(
                       email: _emailController.text,
                       password: _passwordController.text)) {
-                    Get.offAll(() => ());
+                    Get.offAll(() => HomeScreen());
                   } else {}
                 },
                 child: Container(
