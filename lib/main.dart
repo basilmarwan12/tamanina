@@ -3,6 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tamanina/views/education/view/education_view.dart';
+import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
 import 'firebase_options.dart';
 
 import 'welcome_screen.dart';
@@ -53,7 +55,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Cairo',
             textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
           ),
-          home: WelcomeScreen(),
+          home: MedicineNotifcationView(),
         );
       },
     );
