@@ -7,6 +7,8 @@ import 'package:tamanina/profile_screen.dart';
 import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
 import 'package:tamanina/views/nawpat/view/add_nawpat.dart';
 
+import 'views/education/view/education_view.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -192,6 +194,8 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 2:
         Get.to(() => MedicineNotifcationView());
+      case 4:
+        Get.to(() => EducationView());
     }
   }
 }

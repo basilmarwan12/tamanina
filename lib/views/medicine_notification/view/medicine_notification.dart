@@ -15,12 +15,12 @@ class MedicineNotifcationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(appBar: AppBar(backgroundColor: Colors.white,),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(spacing: 15,
           children: [
-            SizedBox(height: 80),
+            SizedBox(height: 60),
             Image.asset('assets/greenpill.png'),
             
             _buildTextField("الاسم", nameController),

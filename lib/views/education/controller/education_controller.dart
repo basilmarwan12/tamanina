@@ -9,7 +9,7 @@ class EducationController extends GetxController{
     isLoading.value = true;
     try {
       await FirebaseFirestore.instance
-          .collection("medicine")
+          .collection("education")
           .add({"date": date, "time": time, "notes": notes});
       Get.snackbar("Success", "Medicine added successfully!");
       return true;
