@@ -5,12 +5,11 @@ import 'package:get/get.dart';
 class EducationController extends GetxController {
   var isLoading = false.obs;
 
-  Future<bool> addEducation(String date, String time, String notes) async {
+  Future<bool> addEducation(String date, String notes) async {
     isLoading.value = true;
     try {
       await FirebaseFirestore.instance.collection("education").add({
         "date": date,
-        "time": time,
         "notes": notes,
         "userId": FirebaseAuth.instance.currentUser!.uid
       });
@@ -19,7 +18,7 @@ class EducationController extends GetxController {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .update({
         "educations": FieldValue.arrayUnion([
-          {"date": date, "time": time, "notes": notes}
+          {"date": date,"notes": notes}
         ])
       });
       Get.snackbar("Success", "Education added successfully!");
