@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:tamanina/models/nawpat.dart';
+import 'package:tamanina/views/nawpat/controller/nawpat_controller.dart';
 
 class AddDataOfNawpat extends StatefulWidget {
   const AddDataOfNawpat({super.key});
@@ -10,6 +14,10 @@ class AddDataOfNawpat extends StatefulWidget {
 
 class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
   String? selectedValue;
+  final NawpatController _controller = Get.put(NawpatController());
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _digController = TextEditingController();
 
   List<String> items = ['Apple', 'Banana', 'Orange', 'Grapes'];
   String selectedOption = 'Male';
@@ -75,6 +83,7 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
                     ),
                   ),
                   TextFormField(
+                    controller: _nameController,
                     decoration: InputDecoration(
                       fillColor: Colors.grey.withOpacity(0.25),
                       filled: true,
@@ -100,16 +109,14 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      fillColor: Colors.grey.withOpacity(0.25),
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.r),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  )
+                  SfDateRangePicker(
+                    selectionColor: Colors.green,
+                    onSelectionChanged:
+                        (DateRangePickerSelectionChangedArgs args) {
+                      print(args.value);
+                      _timeController.text = args.value.toString();
+                    },
+                  ),
                 ],
               ),
               SizedBox(
@@ -340,8 +347,8 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  DropdownButtonFormField<String>(
-                    value: selectedValue,
+                  TextFormField(
+                    controller: _digController,
                     decoration: InputDecoration(
                       fillColor: Colors.grey.withOpacity(0.25),
                       filled: true,
@@ -350,18 +357,7 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
                         borderSide: BorderSide.none,
                       ),
                     ),
-                    items: items.map((String item) {
-                      return DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedValue = newValue;
-                      });
-                    },
-                  ),
+                  )
                 ],
               ),
               SizedBox(
@@ -393,21 +389,47 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
               SizedBox(
                 height: 20.h,
               ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 10.w),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 71, 32, 201),
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                alignment: Alignment.center,
-                child: Text(
-                  "إضافة",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
+              InkWell(
+                onTap: () async {
+                  await _controller
+                      .addNawpatData("lfE3l9xS83XH1fAUoryrZTve0qs1", {
+                    "الاسم": _nameController.text,
+                    "التاريخ": _timeController.text,
+                    "اليوم": getArabicDay(
+                        DateTime.parse(_timeController.text).weekday),
+                    "الاعراض": _digController.text
+                  });
+                  await _controller
+                      .fetchNawpatData("lfE3l9xS83XH1fAUoryrZTve0qs1");
+                },
+                child: Obx(
+                  () => Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10.w),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 71, 32, 201),
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    alignment: Alignment.center,
+                    child: _controller.isLoading()
+                        ? SizedBox(
+                            height: 25,
+                            width: 25,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor: Colors.blueGrey,
+                              strokeWidth: 1.5,
+                            ),
+                          )
+                        : Text(
+                            "إضافة",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -419,5 +441,18 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
         ),
       ),
     );
+  }
+
+  String getArabicDay(int weekday) {
+    Map<int, String> daysInArabic = {
+      1: "الإثنين",
+      2: "الثلاثاء",
+      3: "الأربعاء",
+      4: "الخميس",
+      5: "الجمعة",
+      6: "السبت",
+      7: "الأحد"
+    };
+    return daysInArabic[weekday] ?? "غير معروف";
   }
 }

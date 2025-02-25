@@ -25,6 +25,8 @@ class RegisterController extends GetxController {
       User? user = userCredential.user;
 
       if (user != null) {
+        user.updateDisplayName(name);
+        user.reload();
         await firestore.collection("users").doc(user.uid).set({
           "id": user.uid,
           "name": name,
