@@ -4,9 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:tamanina/home_screen.dart';
-import 'package:tamanina/profile_screen.dart';
-import 'package:tamanina/views/education/view/education_view.dart';
-import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
+import 'package:tamanina/welcome_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -55,7 +53,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Cairo',
             textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
           ),
-          home: HomeScreen(),
+          home: WelcomeScreen(),
         );
       },
     );

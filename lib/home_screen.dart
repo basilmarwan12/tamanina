@@ -1,11 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:tamanina/nawpat_screen.dart';
-import 'package:tamanina/profile_screen.dart';
+import 'package:tamanina/views/nawpat/view/nawpat_screen.dart';
 import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
-import 'package:tamanina/views/nawpat/view/add_nawpat.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "أهلا يارا علي",
+                    "أهلا ${FirebaseAuth.instance.currentUser!.displayName}",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 25.sp,
