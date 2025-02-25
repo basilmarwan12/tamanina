@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tamanina/views/medicine_notification/controller/medicine_controller.dart';
 
 class MedicineNotifcationView extends StatelessWidget {
@@ -10,7 +11,6 @@ class MedicineNotifcationView extends StatelessWidget {
 
   final MedicineController _controller = Get.put(MedicineController());
 
-  final dateController = TextEditingController();
   final timeController = TextEditingController();
   final nameController = TextEditingController();
   final notesController = TextEditingController();
@@ -30,21 +30,49 @@ class MedicineNotifcationView extends StatelessWidget {
             SizedBox(height: 60),
             Image.asset('assets/greenpill.png'),
             _buildTextField("الاسم", nameController),
-            _buildTextField("التاريخ", dateController),
-            _buildTextField("الوقت", timeController),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                  ),
+                  child: Text(
+                    "التارىخ",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                  ),
+                  child: SfDateRangePicker(
+                    selectionColor: Colors.green,
+                    onSelectionChanged:
+                        (DateRangePickerSelectionChangedArgs args) {
+                      print(args.value);
+                      timeController.text = args.value.toString();
+                    },
+                  ),
+                ),
+              ],
+            ),
             _buildTextField("الملحوظات", notesController, isMultiline: true),
             SizedBox(height: 50),
             Obx(() => GestureDetector(
                   onTap: () async {
                     bool success = await _controller.addMedicine(
                         nameController.text,
-                        dateController.text,
                         timeController.text,
                         notesController.text);
 
                     if (success) {
                       nameController.clear();
-                      dateController.clear();
+
                       timeController.clear();
                       notesController.clear();
                     }

@@ -6,13 +6,12 @@ class MedicineController extends GetxController {
   var isLoading = false.obs;
 
   Future<bool> addMedicine(
-      String name, String date, String time, String notes) async {
+      String name, String date, String notes) async {
     isLoading.value = true;
     try {
       await FirebaseFirestore.instance.collection("medicine").add({
         "name": name,
         "date": date,
-        "time": time,
         "notes": notes,
         "userId": FirebaseAuth.instance.currentUser!.uid
       });
@@ -24,7 +23,7 @@ class MedicineController extends GetxController {
           .update(
         {
           "medicines": FieldValue.arrayUnion([
-            {"name": name, "date": date, "time": time, "notes": notes}
+            {"name": name, "date": date, "notes": notes}
           ])
         },
       );
