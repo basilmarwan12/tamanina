@@ -20,11 +20,14 @@ class EducationView extends StatelessWidget {
           child: Column(
         spacing: 15,
         children: [
-          SizedBox(height: 80,), Image.asset('assets/education.png'),
+          SizedBox(
+            height: 80,
+          ),
+          Image.asset('assets/education.png'),
           Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.w,
-                ),
+            padding: EdgeInsets.symmetric(
+              horizontal: 20.w,
+            ),
             child: TextFormField(
               controller: dateController,
               keyboardType: TextInputType.text,
@@ -47,9 +50,9 @@ class EducationView extends StatelessWidget {
             ),
           ),
           Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.w,
-                ),
+            padding: EdgeInsets.symmetric(
+              horizontal: 20.w,
+            ),
             child: TextFormField(
               controller: timeController,
               keyboardType: TextInputType.text,
@@ -72,10 +75,12 @@ class EducationView extends StatelessWidget {
             ),
           ),
           Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.w,
-                ),
-            child: TextFormField(minLines: 4,maxLines: 10,
+            padding: EdgeInsets.symmetric(
+              horizontal: 20.w,
+            ),
+            child: TextFormField(
+              minLines: 4,
+              maxLines: 10,
               controller: notesController,
               keyboardType: TextInputType.text,
               textDirection: TextDirection.rtl,
@@ -96,27 +101,43 @@ class EducationView extends StatelessWidget {
                       borderSide: BorderSide.none)),
             ),
           ),
-       SizedBox(height: 50,),
-        GestureDetector(
-                onTap: () {},
-                child: Container(
-                  width: 200,
-                  height: 60,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: const Color(0xffA8BDD2),
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(25)),
-                  child: Text(
-                    "حفظ",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25.sp,
-                      fontWeight: FontWeight.normal,
+          SizedBox(
+            height: 50,
+          ),
+          Obx(()=>GestureDetector(
+            onTap: () async {
+              bool success = await _controller.addEducation(dateController.text,
+                  timeController.text, notesController.text);
+              if (success) {
+                dateController.clear();
+                timeController.clear();
+                notesController.clear();
+              }
+            },
+            child: Container(
+              width: 200,
+              height: 60,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: const Color(0xffA8BDD2),
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(25)),
+              child: _controller.isLoading.value
+                  ? CircularProgressIndicator(
+                       color: Colors.white,
+                      backgroundColor: Colors.blueGrey,
+                      strokeWidth: 1.5,
+                    )
+                  : Text(
+                      "حفظ",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25.sp,
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
-                  ),
-                ),
-              )
+            ),
+          ))
         ],
       )),
     );
