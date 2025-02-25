@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/views/medicine_notification/controller/medicine_controller.dart';
+import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
 import 'package:tamanina/views/nawpat/view/add_nawpat.dart';
 
 class MedicineScreen extends StatelessWidget {
@@ -56,7 +57,7 @@ class MedicineScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
-          Get.to(() => const AddDataOfNawpat());
+          Get.to(() => MedicineNotifcationView());
         },
         backgroundColor: Colors.white,
         child: const Icon(
