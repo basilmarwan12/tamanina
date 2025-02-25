@@ -14,14 +14,14 @@ class EducationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(appBar: AppBar(backgroundColor: Colors.white,),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
           child: Column(
         spacing: 15,
         children: [
           SizedBox(
-            height: 80,
+            height: 60,
           ),
           Image.asset('assets/education.png'),
           Padding(

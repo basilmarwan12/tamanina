@@ -1,17 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-class EducationController extends GetxController{
+class EducationController extends GetxController {
   var isLoading = false.obs;
 
-  Future<bool> addEducation(
-     String date, String time, String notes) async {
+  Future<bool> addEducation(String date, String time, String notes) async {
     isLoading.value = true;
     try {
+      await FirebaseFirestore.instance.collection("education").add({
+        "date": date,
+        "time": time,
+        "notes": notes,
+        "userId": FirebaseAuth.instance.currentUser!.uid
+      });
       await FirebaseFirestore.instance
-          .collection("education")
-          .add({"date": date, "time": time, "notes": notes});
-      Get.snackbar("Success", "Medicine added successfully!");
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({
+        "educations": FieldValue.arrayUnion([
+          {"date": date, "time": time, "notes": notes}
+        ])
+      });
+      Get.snackbar("Success", "Education added successfully!");
       return true;
     } catch (e) {
       Get.snackbar("Error", "Something went wrong: $e");
@@ -20,5 +31,4 @@ class EducationController extends GetxController{
       isLoading.value = false; // Reset loading state properly
     }
   }
-  
 }
