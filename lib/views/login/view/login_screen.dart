@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/home_screen.dart';
 import 'package:tamanina/views/nawpat/view/nawpat_screen.dart';
-import 'package:tamanina/profile_screen.dart';
+import 'package:tamanina/views/profile/view/profile_screen.dart';
 import 'package:tamanina/some_information_screen.dart';
 import 'package:tamanina/views/login/controller/login_controller.dart';
 import 'package:tamanina/welcome_screen.dart';
