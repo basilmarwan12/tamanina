@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:tamanina/views/nawpat/view/add_nawpat.dart';
 
 class NawpatScreen extends StatelessWidget {
   const NawpatScreen({super.key});
@@ -51,12 +53,14 @@ class NawpatScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
-        onPressed: () {},
+        onPressed: () {
+          Get.to(() => AddDataOfNawpat());
+        },
+        backgroundColor: Colors.white,
         child: Icon(
           Icons.add,
           color: Colors.black,
         ),
-        backgroundColor: Colors.white,
       ),
       body: ListView.builder(
         itemCount: 5,

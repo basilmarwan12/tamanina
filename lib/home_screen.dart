@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:tamanina/nawpat_screen.dart';
+import 'package:tamanina/profile_screen.dart';
+import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
+import 'package:tamanina/views/nawpat/view/add_nawpat.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,8 +16,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<String> image = [
+    "assets/hosp.png",
     "assets/note.png",
-    "assets/caps.png",
+    "assets/greenpill.png",
     "assets/emarg.png",
     "assets/education.png",
     "assets/inform.png",
@@ -99,40 +105,43 @@ class _HomeScreenState extends State<HomeScreen> {
                 scrollDirection: Axis.horizontal,
                 itemCount: image.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10.w),
-                    alignment: Alignment.center,
-                    width: 140.w,
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.black, width: 1.w),
-                      borderRadius: BorderRadius.circular(25.r),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          text[index],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 25.sp,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
+                  return InkWell(
+                    onTap: () {
+                      _toNavigate(index);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.w),
+                      alignment: Alignment.center,
+                      width: 140.w,
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black, width: 1.w),
+                        borderRadius: BorderRadius.circular(25.r),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            text[index],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 25.sp,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        index == 0
-                            ? SizedBox()
-                            : Image(
-                                height: 80,
-                                image: AssetImage(
-                                  image[index],
-                                ),
-                              )
-                      ],
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Image(
+                            height: 80,
+                            image: AssetImage(
+                              image[index],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -173,5 +182,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void _toNavigate(int index) {
+    switch (index) {
+      case 0:
+      case 1:
+        Get.to(() => NawpatScreen());
+        break;
+      case 2:
+        Get.to(() => MedicineNotifcationView());
+    }
   }
 }
