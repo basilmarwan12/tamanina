@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:tamanina/views/education/view/education_screen.dart';
 import 'package:tamanina/views/nawpat/view/nawpat_screen.dart';
 import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
 
@@ -196,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 2:
         Get.to(() => MedicineScreen());
       case 4:
-        Get.to(() => EducationView());
+        Get.to(() => EducationScreen());
     }
   }
 }
