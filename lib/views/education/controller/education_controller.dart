@@ -10,7 +10,6 @@ class EducationController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     fetchEducations(FirebaseAuth.instance.currentUser!.uid);
   }
@@ -28,16 +27,17 @@ class EducationController extends GetxController {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .update({
         "educations": FieldValue.arrayUnion([
-          {"date": date,"notes": notes}
+          {"date": date, "notes": notes}
         ])
       });
-      Get.snackbar("Success", "Education added successfully!");
+
+      Get.snackbar("نجاح", "تمت إضافة التعليم بنجاح!");
       return true;
     } catch (e) {
-      Get.snackbar("Error", "Something went wrong: $e");
+      Get.snackbar("خطأ", "حدث خطأ أثناء إضافة التعليم: $e");
       return false;
     } finally {
-      isLoading.value = false; // Reset loading state properly
+      isLoading.value = false;
     }
   }
 

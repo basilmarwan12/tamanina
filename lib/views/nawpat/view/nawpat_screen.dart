@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/views/nawpat/view/add_nawpat.dart';
-
-import '../controller/nawpat_controller.dart'; // Import the controller
+import '../controller/nawpat_controller.dart';
 
 class NawpatScreen extends StatelessWidget {
   NawpatScreen({super.key});
@@ -86,61 +85,65 @@ class NawpatScreen extends StatelessWidget {
 
             return Container(
               width: 365.w,
-              padding: const EdgeInsets.only(right: 20, top: 10),
-              margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
+              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    blurRadius: 5,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "النوبة رقم  ${index + 1}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  Text(
-                    "الاسم : ${nawpat.name}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  Text(
-                    "التاريخ : ${nawpat.date.substring(0, 10)}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  Text(
-                    "اليوم : ${nawpat.day}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  Text(
-                    "الأعراض : ${nawpat.symptoms}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
+                  _buildInfoRow("🔹 النوبة رقم:", "${index + 1}"),
+                  _buildInfoRow("👤 الاسم:", nawpat.name),
+                  _buildInfoRow("📅 التاريخ:", nawpat.date.substring(0, 10)),
+                  _buildInfoRow("🗓️ اليوم:", nawpat.day),
+                  _buildInfoRow("🤕 الأعراض:", nawpat.symptoms),
+                  _buildInfoRow("📌 النوع:", nawpat.type),
+                  _buildInfoRow(
+                      "🔍 هل شعرت بها عند الحدوث؟:", nawpat.selection),
+                  _buildInfoRow("⏳ المدة:", nawpat.duration),
+                  _buildInfoRow("📍 أماكن الحدوث:", nawpat.location),
                 ],
               ),
             );
           },
         );
       }),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: RichText(
+        textDirection: TextDirection.rtl,
+        text: TextSpan(
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          children: [
+            TextSpan(
+              text: "$label ",
+              style: const TextStyle(color: Colors.blue),
+            ),
+            TextSpan(
+              text: value,
+              style: const TextStyle(color: Colors.black87),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

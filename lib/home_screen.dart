@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,9 +7,6 @@ import 'package:tamanina/some_information_screen.dart';
 import 'package:tamanina/views/profile/view/profile_screen.dart';
 import 'package:tamanina/views/education/view/education_screen.dart';
 import 'package:tamanina/views/nawpat/view/nawpat_screen.dart';
-import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
-
-import 'views/education/view/education_view.dart';
 import 'views/medicine_notification/view/medicine_screen.dart';
 
 class HomeScreen extends StatefulWidget {
