@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/views/medicine_notification/controller/medicine_controller.dart';
 import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
-import 'package:tamanina/views/nawpat/view/add_nawpat.dart';
 
 class MedicineScreen extends StatelessWidget {
   MedicineScreen({super.key});

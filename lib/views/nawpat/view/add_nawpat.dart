@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:tamanina/models/nawpat.dart';
 import 'package:tamanina/views/nawpat/controller/nawpat_controller.dart';
 
 class AddDataOfNawpat extends StatefulWidget {
@@ -14,14 +13,8 @@ class AddDataOfNawpat extends StatefulWidget {
 }
 
 class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
-  String? selectedValue;
   final NawpatController _controller = Get.put(NawpatController());
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController();
-  final TextEditingController _digController = TextEditingController();
 
-  List<String> items = ['Apple', 'Banana', 'Orange', 'Grapes'];
-  String selectedOption = 'Male';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,182 +31,226 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
           ),
         ),
       ),
-      body: Container(
-        width: double.infinity,
-        margin: EdgeInsets.symmetric(horizontal: 20.w),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.notifications,
-                size: 80.sp,
-                color: const Color.fromARGB(255, 71, 32, 201),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Text(
-                "نوبة",
-                style: TextStyle(
+      body: GetBuilder<NawpatController>(builder: (controller) {
+        return Container(
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(horizontal: 20.w),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.notifications,
+                  size: 80.sp,
                   color: const Color.fromARGB(255, 71, 32, 201),
-                  fontSize: 35.sp,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
-              Text(
-                "نوبة",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
+                SizedBox(height: 20.h),
+                _buildTextField("الإسم", controller.nameController),
+                _buildDatePicker(controller),
+                _buildTextField("الأعراض المصاحبة", controller.digController),
+                _buildDropdownField(
+                  label: "النوع",
+                  items: ['ذكر', 'انثي'],
+                  value: controller.selectedType,
+                  onChanged: (newValue) {
+                    controller.selectedType = newValue;
+                    controller.update();
+                  },
                 ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "الإسم",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.grey.withOpacity(0.25),
-                      filled: true,
-                      border: OutlineInputBorder(
+                _buildRadioGroup(
+                  label: "هل شعرت بها عند الحدوث؟",
+                  options: ['نعم', 'لا'],
+                  selectedValue: controller.selectedOption,
+                  onChanged: (newValue) {
+                    controller.selectedOption = newValue!;
+                    controller.update();
+                  },
+                ),
+                _buildTextField("المدة", controller.durationController),
+                _buildTextField("أماكن الحدوث", controller.locationController),
+                SizedBox(height: 20.h),
+                InkWell(
+                  onTap: () async {
+                    await _controller.addNawpatData();
+                    await _controller.fetchNawpatData(
+                        FirebaseAuth.instance.currentUser!.uid);
+                  },
+                  child: Obx(
+                    () => Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.w),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 71, 32, 201),
                         borderRadius: BorderRadius.circular(20.r),
-                        borderSide: BorderSide.none,
                       ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "الوقت",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SfDateRangePicker(
-                    selectionColor: Colors.green,
-                    onSelectionChanged:
-                        (DateRangePickerSelectionChangedArgs args) {
-                      print(args.value);
-                      _timeController.text = args.value.toString();
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "الأعراض المصاحبة",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextFormField(
-                    controller: _digController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.grey.withOpacity(0.25),
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.r),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              InkWell(
-                onTap: () async {
-                  await _controller
-                      .addNawpatData(FirebaseAuth.instance.currentUser!.uid, {
-                    "الاسم": _nameController.text,
-                    "التاريخ": _timeController.text,
-                    "اليوم": getArabicDay(
-                        DateTime.parse(_timeController.text).weekday),
-                    "الاعراض": _digController.text
-                  });
-                  await _controller
-                      .fetchNawpatData(FirebaseAuth.instance.currentUser!.uid);
-                },
-                child: Obx(
-                  () => Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10.w),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 71, 32, 201),
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 10.h),
-                    alignment: Alignment.center,
-                    child: _controller.isLoading()
-                        ? SizedBox(
-                            height: 25,
-                            width: 25,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              backgroundColor: Colors.blueGrey,
-                              strokeWidth: 1.5,
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      alignment: Alignment.center,
+                      child: _controller.isLoading.value
+                          ? const SizedBox(
+                              height: 25,
+                              width: 25,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                backgroundColor: Colors.blueGrey,
+                                strokeWidth: 1.5,
+                              ),
+                            )
+                          : Text(
+                              "إضافة",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          )
-                        : Text(
-                            "إضافة",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
-  String getArabicDay(int weekday) {
-    Map<int, String> daysInArabic = {
-      1: "الإثنين",
-      2: "الثلاثاء",
-      3: "الأربعاء",
-      4: "الخميس",
-      5: "الجمعة",
-      6: "السبت",
-      7: "الأحد"
-    };
-    return daysInArabic[weekday] ?? "غير معروف";
+  Widget _buildTextField(String label, TextEditingController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        TextFormField(
+          controller: controller,
+          style: TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            fillColor: Colors.grey.withOpacity(0.25),
+            filled: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.r),
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+        SizedBox(height: 20.h),
+      ],
+    );
+  }
+
+  Widget _buildDatePicker(NawpatController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "الوقت",
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SfDateRangePicker(
+          selectionColor: Colors.green,
+          onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+            controller.timeController.text = args.value.toString();
+          },
+        ),
+        SizedBox(height: 20.h),
+      ],
+    );
+  }
+
+  Widget _buildDropdownField({
+    required String label,
+    required List<String> items,
+    required String? value,
+    required Function(String?) onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        DropdownButtonFormField<String>(
+          value: value,
+          decoration: InputDecoration(
+            fillColor: Colors.grey.withOpacity(0.25),
+            filled: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.r),
+              borderSide: BorderSide.none,
+            ),
+          ),
+          items: items.map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(
+                item,
+                style: TextStyle(color: Colors.black),
+              ),
+            );
+          }).toList(),
+          onChanged: onChanged,
+        ),
+        SizedBox(height: 20.h),
+      ],
+    );
+  }
+
+  Widget _buildRadioGroup({
+    required String label,
+    required List<String> options,
+    required String selectedValue,
+    required Function(String?) onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Row(
+          children: options.map((option) {
+            return Row(
+              children: [
+                Radio<String>(
+                  value: option,
+                  fillColor:
+                      WidgetStatePropertyAll(Colors.grey.withOpacity(0.25)),
+                  groupValue: selectedValue,
+                  onChanged: onChanged,
+                ),
+                Text(
+                  option,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            );
+          }).toList(),
+        ),
+        SizedBox(height: 20.h),
+      ],
+    );
   }
 }
