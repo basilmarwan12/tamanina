@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:tamanina/models/medicine.dart';
 
 class MedicineController extends GetxController {
   var isLoading = false.obs;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  RxList<Medicine> medicineList = <Medicine>[].obs;
 
   Future<bool> addMedicine(
       String name, String date, String time, String notes) async {
@@ -35,7 +38,7 @@ class MedicineController extends GetxController {
       Get.snackbar("Error", "Something went wrong: $e");
       return false;
     } finally {
-      isLoading.value = false; // Reset loading state properly
+      isLoading.value = false;
     }
   }
 }

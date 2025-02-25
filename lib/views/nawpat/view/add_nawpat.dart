@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -126,220 +127,6 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "النوع",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  DropdownButtonFormField<String>(
-                    value: selectedValue,
-                    decoration: InputDecoration(
-                      fillColor: Colors.grey.withOpacity(0.25),
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.r),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    items: items.map((String item) {
-                      return DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedValue = newValue;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "هل شعرت بها عند الحدوث؟",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.25),
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    child: Row(
-                      children: [
-                        Row(
-                          children: [
-                            Radio(
-                              value: 'نعم',
-                              fillColor: WidgetStatePropertyAll(
-                                Colors.grey.withOpacity(0.25),
-                              ),
-                              groupValue: selectedOption,
-                              onChanged: (String? value) {
-                                setState(() {
-                                  selectedOption = value!;
-                                });
-                              },
-                            ),
-                            Text(
-                              "نعم",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Radio(
-                              value: 'لا',
-                              fillColor: WidgetStatePropertyAll(
-                                Colors.grey.withOpacity(0.25),
-                              ),
-                              groupValue: selectedOption,
-                              onChanged: (String? value) {
-                                setState(() {
-                                  selectedOption = value!;
-                                });
-                              },
-                            ),
-                            Text(
-                              "لا",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "هل شعرت بها أثناء النوم؟",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.25),
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    child: Row(
-                      children: [
-                        Row(
-                          children: [
-                            Radio(
-                              value: 'نعم',
-                              fillColor: WidgetStatePropertyAll(
-                                Colors.grey.withOpacity(0.25),
-                              ),
-                              groupValue: selectedOption,
-                              onChanged: (String? value) {
-                                setState(() {
-                                  selectedOption = value!;
-                                });
-                              },
-                            ),
-                            Text(
-                              "نعم",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Radio(
-                              value: 'لا',
-                              fillColor: WidgetStatePropertyAll(
-                                Colors.grey.withOpacity(0.25),
-                              ),
-                              groupValue: selectedOption,
-                              onChanged: (String? value) {
-                                setState(() {
-                                  selectedOption = value!;
-                                });
-                              },
-                            ),
-                            Text(
-                              "لا",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "المدة",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      fillColor: Colors.grey.withOpacity(0.25),
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.r),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
                     "الأعراض المصاحبة",
                     style: TextStyle(
                       color: Colors.grey,
@@ -363,36 +150,10 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
               SizedBox(
                 height: 20.h,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "أماكن الحدوث",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      fillColor: Colors.grey.withOpacity(0.25),
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.r),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
               InkWell(
                 onTap: () async {
                   await _controller
-                      .addNawpatData("lfE3l9xS83XH1fAUoryrZTve0qs1", {
+                      .addNawpatData(FirebaseAuth.instance.currentUser!.uid, {
                     "الاسم": _nameController.text,
                     "التاريخ": _timeController.text,
                     "اليوم": getArabicDay(
@@ -400,7 +161,7 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
                     "الاعراض": _digController.text
                   });
                   await _controller
-                      .fetchNawpatData("lfE3l9xS83XH1fAUoryrZTve0qs1");
+                      .fetchNawpatData(FirebaseAuth.instance.currentUser!.uid);
                 },
                 child: Obx(
                   () => Container(
