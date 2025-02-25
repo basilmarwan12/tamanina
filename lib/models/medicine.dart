@@ -1,27 +1,33 @@
 class Medicine {
-  String type;
-  DateTime dateTime;
+  String userId;
+  String id;
+  String name;
+  String dateTime;
   String notes;
 
   Medicine({
-    required this.type,
     required this.dateTime,
     required this.notes,
+    required this.userId,
+    required this.id,
+    required this.name,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'type': type,
-      'dateTime': dateTime.toIso8601String(),
+      'dateTime': dateTime,
       'notes': notes,
     };
   }
 
-  factory Medicine.fromJson(Map<String, dynamic> json) {
+  factory Medicine.fromMap(String docId, Map<String, dynamic> data) {
+    print(data);
     return Medicine(
-      type: json['type'],
-      dateTime: DateTime.parse(json['dateTime']),
-      notes: json['notes'],
+      id: docId,
+      userId: data['userId'] ?? '',
+      dateTime: data['date'] ?? '',
+      name: data['name'] ?? '',
+      notes: data['notes'] ?? '',
     );
   }
 }

@@ -8,8 +8,13 @@ class MedicineController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   RxList<Medicine> medicineList = <Medicine>[].obs;
 
-  Future<bool> addMedicine(
-      String name, String date, String notes) async {
+  @override
+  void onInit() async {
+    super.onInit();
+    await fetchMedicines(FirebaseAuth.instance.currentUser!.uid);
+  }
+
+  Future<bool> addMedicine(String name, String date, String notes) async {
     isLoading.value = true;
     try {
       await FirebaseFirestore.instance.collection("medicine").add({
@@ -38,6 +43,26 @@ class MedicineController extends GetxController {
       return false;
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchMedicines(String userId) async {
+    try {
+      isLoading.value = true;
+
+      QuerySnapshot querySnapshot = await firestore
+          .collection('medicine')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      medicineList.value = querySnapshot.docs.map((doc) {
+        return Medicine.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+
+      isLoading.value = false;
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar("خطأ", "فشل تحميل بيانات الأدوية: $e");
     }
   }
 }

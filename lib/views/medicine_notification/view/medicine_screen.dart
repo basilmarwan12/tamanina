@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:tamanina/views/medicine_notification/controller/medicine_controller.dart';
 import 'package:tamanina/views/nawpat/view/add_nawpat.dart';
 
-class NawpatScreen extends StatelessWidget {
-  NawpatScreen({super.key});
+class MedicineScreen extends StatelessWidget {
+  MedicineScreen({super.key});
   final MedicineController _medicineController = Get.put(MedicineController());
 
   @override
@@ -81,7 +81,7 @@ class NawpatScreen extends StatelessWidget {
         return ListView.builder(
           itemCount: _medicineController.medicineList.length,
           itemBuilder: (context, index) {
-            final nawpat = _medicineController.medicineList[index];
+            final medicines = _medicineController.medicineList[index];
 
             return Container(
               width: 365.w,
@@ -95,7 +95,7 @@ class NawpatScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "النوبة رقم  ${index + 1}",
+                    "العلاج رقم  ${index + 1}",
                     textDirection: TextDirection.rtl,
                     style: const TextStyle(
                         color: Colors.black,
@@ -103,7 +103,7 @@ class NawpatScreen extends StatelessWidget {
                         fontWeight: FontWeight.normal),
                   ),
                   Text(
-                    "الاسم : ${nawpat.name}",
+                    "الاسم : ${medicines.name}",
                     textDirection: TextDirection.rtl,
                     style: const TextStyle(
                         color: Colors.black,
@@ -111,7 +111,7 @@ class NawpatScreen extends StatelessWidget {
                         fontWeight: FontWeight.normal),
                   ),
                   Text(
-                    "التاريخ : ${nawpat.date.substring(0, 10)}",
+                    "التاريخ : ${medicines.dateTime.toString().substring(0, 10)}",
                     textDirection: TextDirection.rtl,
                     style: const TextStyle(
                         color: Colors.black,
@@ -119,15 +119,7 @@ class NawpatScreen extends StatelessWidget {
                         fontWeight: FontWeight.normal),
                   ),
                   Text(
-                    "اليوم : ${nawpat.day}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  Text(
-                    "الأعراض : ${nawpat.symptoms}",
+                    "الملحوظات  : ${medicines.notes}",
                     textDirection: TextDirection.rtl,
                     style: const TextStyle(
                         color: Colors.black,

@@ -8,6 +8,7 @@ import 'package:tamanina/views/nawpat/view/nawpat_screen.dart';
 import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
 
 import 'views/education/view/education_view.dart';
+import 'views/medicine_notification/view/medicine_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -193,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Get.to(() => NawpatScreen());
         break;
       case 2:
-        Get.to(() => MedicineNotifcationView());
+        Get.to(() => MedicineScreen());
       case 4:
         Get.to(() => EducationView());
     }
