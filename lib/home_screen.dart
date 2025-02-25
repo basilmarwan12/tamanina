@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:tamanina/views/profile/view/profile_screen.dart';
 import 'package:tamanina/views/education/view/education_screen.dart';
 import 'package:tamanina/views/nawpat/view/nawpat_screen.dart';
 import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
@@ -55,12 +56,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.black,
                   width: 1.w,
                 )),
-            child: ImageIcon(
-              AssetImage(
-                "assets/person_icon.png",
+            child: InkWell(onTap: (){
+              Get.to(() => ProfileScreen());
+            },
+              child: ImageIcon(
+                AssetImage(
+                  "assets/person_icon.png",
+                ),
+                color: Colors.black,
+                size: 20.sp,
               ),
-              color: Colors.black,
-              size: 20.sp,
             ),
           ),
         ),
