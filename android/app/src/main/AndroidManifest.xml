@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
-        android:label="tamanina"
+        android:label="طمأنينة"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <receiver android:exported="false"

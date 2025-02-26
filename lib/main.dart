@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tamanina/views/home/view/home_screen.dart';
 import 'package:tamanina/welcome_screen.dart';
 import 'package:workmanager/workmanager.dart';
@@ -37,6 +38,11 @@ void main() async {
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
   );
+
+  if (await Permission.notification.isGranted) {
+    print("✅ إذن التنبيه الدقيق ممنوح بالفعل");
+  }
+
   runApp(const MyApp());
 }
 

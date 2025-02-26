@@ -128,14 +128,15 @@ class NawpatScreen extends StatelessWidget {
         textDirection: TextDirection.rtl,
         text: TextSpan(
           style: const TextStyle(
-            fontSize: 18,
+            fontSize: 25,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
           children: [
             TextSpan(
               text: "$label ",
-              style: const TextStyle(color: Colors.blue),
+              style: const TextStyle(
+                  color: Colors.blue, fontWeight: FontWeight.w900),
             ),
             TextSpan(
               text: value,

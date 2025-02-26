@@ -83,6 +83,10 @@ class MedicineController extends GetxController {
           print("✅ إذن التنبيه الدقيق ممنوح بالفعل");
           return true;
         }
+        if (await Permission.notification.isGranted) {
+          print("✅ إذن التنبيه الدقيق ممنوح بالفعل");
+          return true;
+        }
 
         PermissionStatus status = await Permission.scheduleExactAlarm.request();
 
