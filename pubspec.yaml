@@ -51,6 +51,8 @@ dependencies:
   omni_datetime_picker: ^2.0.6
   intl: ^0.19.0
   permission_handler: ^11.4.0
+  audioplayers: ^6.2.0
+  video_player: ^2.9.3
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +79,8 @@ flutter:
   assets:
     - assets/
     - assets/fonts/Cairo/
+    - assets/audio/
+    - assets/video/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see

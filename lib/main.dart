@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:tamanina/home_screen.dart';
+import 'package:tamanina/views/home/view/home_screen.dart';
 import 'package:tamanina/welcome_screen.dart';
 import 'package:workmanager/workmanager.dart';
 import 'firebase_options.dart';
@@ -25,7 +25,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
 

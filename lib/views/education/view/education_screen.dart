@@ -3,13 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/views/education/controller/education_controller.dart';
 import 'package:tamanina/views/education/view/education_view.dart';
-import 'package:tamanina/views/medicine_notification/controller/medicine_controller.dart';
-import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
-import 'package:tamanina/views/nawpat/view/add_nawpat.dart';
 
 class EducationScreen extends StatelessWidget {
   EducationScreen({super.key});
-  final EducationController _educationController =Get.put(EducationController());
+  final EducationController _educationController =
+      Get.put(EducationController());
 
   @override
   Widget build(BuildContext context) {
@@ -97,36 +95,42 @@ class EducationScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "السجل التعليمي رقم  ${index + 1}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  Text(
-                    "التاريخ : ${educations.date.toString().substring(0, 10)}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  Text(
-                    "الملحوظات  : ${educations.notes}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
+                  _buildInfoRow("🔹 السجل رقم:", "${index + 1}"),
+                  _buildInfoRow("📅 التاريخ :",
+                      " ${educations.date.toString().substring(0, 10)}"),
+                  _buildInfoRow("📝 الملحوظات :", "${educations.notes}"),
                 ],
               ),
             );
           },
         );
       }),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: RichText(
+        textDirection: TextDirection.rtl,
+        text: TextSpan(
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          children: [
+            TextSpan(
+              text: "$label ",
+              style: const TextStyle(color: Colors.blue),
+            ),
+            TextSpan(
+              text: value,
+              style: const TextStyle(color: Colors.black87),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

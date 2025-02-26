@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:tamanina/home_screen.dart';
+import 'package:tamanina/views/home/view/home_screen.dart';
 import 'package:tamanina/views/nawpat/view/nawpat_screen.dart';
 import 'package:tamanina/views/profile/view/profile_screen.dart';
 import 'package:tamanina/some_information_screen.dart';

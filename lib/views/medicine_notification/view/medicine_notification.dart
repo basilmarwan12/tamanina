@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:intl/intl.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:tamanina/views/medicine_notification/controller/medicine_controller.dart';
 
 class MedicineNotifcationView extends StatelessWidget {
@@ -37,27 +37,7 @@ class MedicineNotifcationView extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                     horizontal: 20.w,
                   ),
-                  child: Text(
-                    "التارىخ",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.w,
-                  ),
-                  child: SfDateRangePicker(
-                    selectionColor: Colors.green,
-                    onSelectionChanged:
-                        (DateRangePickerSelectionChangedArgs args) {
-                      print(args.value);
-                      timeController.text = args.value.toString();
-                    },
-                  ),
+                  child: _buildDatePicker(_controller, context),
                 ),
               ],
             ),
@@ -67,14 +47,16 @@ class MedicineNotifcationView extends StatelessWidget {
                   onTap: () async {
                     bool success = await _controller.addMedicine(
                         nameController.text,
-                        timeController.text,
+                        _controller.timeText.value,
                         notesController.text);
 
                     if (success) {
                       nameController.clear();
-
+                      _controller.timeText.value = "";
                       timeController.clear();
                       notesController.clear();
+                      await _controller.fetchMedicines(
+                          FirebaseAuth.instance.currentUser!.uid);
                     }
                   },
                   child: Container(
@@ -108,6 +90,112 @@ class MedicineNotifcationView extends StatelessWidget {
     );
   }
 
+  Widget _buildDatePicker(MedicineController controller, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "الوقت",
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            DateTime? dateTime = await showOmniDateTimePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
+              lastDate: DateTime.now().add(const Duration(days: 3652)),
+              is24HourMode: false,
+              isShowSeconds: false,
+              minutesInterval: 1,
+              secondsInterval: 1,
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
+              constraints: const BoxConstraints(
+                maxWidth: 350,
+                maxHeight: 650,
+              ),
+              transitionBuilder: (context, anim1, anim2, child) {
+                return FadeTransition(
+                  opacity: anim1.drive(
+                    Tween(begin: 0, end: 1),
+                  ),
+                  child: child,
+                );
+              },
+              transitionDuration: const Duration(milliseconds: 200),
+              barrierDismissible: true,
+              selectableDayPredicate: (dateTime) {
+                if (dateTime == DateTime(2023, 2, 25)) {
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            );
+
+            if (dateTime != null) {
+              controller.timeText.value = dateTime.toIso8601String();
+            }
+          },
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.25),
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Obx(
+              () => Text(
+                controller.timeText.value.isEmpty
+                    ? "اختر التاريخ والوقت"
+                    : formatDateTime(controller.timeText.value),
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 20.h),
+      ],
+    );
+  }
+
+  String formatDateTime(String dateTimeStr) {
+    try {
+      DateTime dateTime = DateTime.parse(dateTimeStr);
+
+      Map<int, String> arabicMonths = {
+        1: "يناير",
+        2: "فبراير",
+        3: "مارس",
+        4: "أبريل",
+        5: "مايو",
+        6: "يونيو",
+        7: "يوليو",
+        8: "أغسطس",
+        9: "سبتمبر",
+        10: "أكتوبر",
+        11: "نوفمبر",
+        12: "ديسمبر"
+      };
+
+      String period = dateTime.hour >= 12 ? "مساءً" : "صباحًا";
+
+      int hour = dateTime.hour % 12;
+      hour = hour == 0 ? 12 : hour;
+
+      return "${dateTime.day} ${arabicMonths[dateTime.month]} ${dateTime.year} - $hour:${DateFormat('mm').format(dateTime)} $period";
+    } catch (e) {
+      return "تاريخ غير صالح";
+    }
+  }
+
   Widget _buildTextField(String hint, TextEditingController controller,
       {bool isMultiline = false}) {
     return Padding(
@@ -115,7 +203,6 @@ class MedicineNotifcationView extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         keyboardType: TextInputType.text,
-        textDirection: TextDirection.rtl,
         style: TextStyle(color: Colors.black),
         textAlign: TextAlign.right,
         minLines: isMultiline ? 4 : 1,

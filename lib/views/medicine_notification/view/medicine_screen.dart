@@ -15,9 +15,7 @@ class MedicineScreen extends StatelessWidget {
         forceMaterialTransparency: false,
         backgroundColor: Colors.transparent,
         leading: GestureDetector(
-          onTap: () async {
-            Get.back();
-          },
+          onTap: () => Get.back(),
           child: Container(
             width: 50.w,
             height: 50.h,
@@ -26,16 +24,12 @@ class MedicineScreen extends StatelessWidget {
               color: Colors.black,
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-              size: 30.sp,
-            ),
+            child: Icon(Icons.arrow_back, color: Colors.white, size: 30.sp),
           ),
         ),
         centerTitle: true,
         title: Text(
-          "سجل الادوية",
+          "سجل الأدوية",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -50,7 +44,7 @@ class MedicineScreen extends StatelessWidget {
               width: 30.w,
               height: 30.h,
             ),
-          )
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -59,10 +53,7 @@ class MedicineScreen extends StatelessWidget {
           Get.to(() => MedicineNotifcationView());
         },
         backgroundColor: Colors.white,
-        child: const Icon(
-          Icons.add,
-          color: Colors.black,
-        ),
+        child: const Icon(Icons.add, color: Colors.black),
       ),
       body: Obx(() {
         if (_medicineController.isLoading.value) {
@@ -72,7 +63,7 @@ class MedicineScreen extends StatelessWidget {
         if (_medicineController.medicineList.isEmpty) {
           return const Center(
             child: Text(
-              "لا توجد بيانات متاحة",
+              "📭 لا توجد بيانات متاحة",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           );
@@ -85,53 +76,64 @@ class MedicineScreen extends StatelessWidget {
 
             return Container(
               width: 365.w,
-              padding: const EdgeInsets.only(right: 20, top: 10),
-              margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
+              padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 8,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "العلاج رقم  ${index + 1}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  Text(
-                    "الاسم : ${medicines.name}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  Text(
-                    "التاريخ : ${medicines.dateTime.toString().substring(0, 10)}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  Text(
-                    "الملحوظات  : ${medicines.notes}",
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
+                  _buildInfoRow("💊 العلاج رقم", "${index + 1}"),
+                  _buildInfoRow("📌 الاسم", medicines.name),
+                  _buildInfoRow("📅 التاريخ",
+                      medicines.dateTime.toString().substring(0, 10)),
+                  _buildInfoRow(
+                      "📝 الملاحظات",
+                      medicines.notes.isEmpty
+                          ? "لا توجد ملاحظات"
+                          : medicines.notes),
                 ],
               ),
             );
           },
         );
       }),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: RichText(
+        textDirection: TextDirection.rtl,
+        text: TextSpan(
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          children: [
+            TextSpan(
+              text: "$label: ",
+              style: const TextStyle(color: Colors.blue),
+            ),
+            TextSpan(
+              text: value,
+              style: const TextStyle(color: Colors.black87),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
