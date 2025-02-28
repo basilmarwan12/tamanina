@@ -13,6 +13,17 @@ class EducationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
+        onPressed: () {
+          Get.to(() => EducationView());
+        },
+        backgroundColor: Colors.white,
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
+      ),
       appBar: AppBar(
         title: const Text("سجل التعليم"),
         backgroundColor: Colors.white,
@@ -26,7 +37,10 @@ class EducationScreen extends StatelessWidget {
           return const Center(
             child: Text(
               "📭 لا توجد بيانات متاحة",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
             ),
           );
         }

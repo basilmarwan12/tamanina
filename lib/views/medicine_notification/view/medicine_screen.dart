@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/models/medicine.dart';
 import 'package:tamanina/views/medicine_notification/controller/medicine_controller.dart';
+import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
 import 'medicine_details.dart';
 
 class MedicineScreen extends StatelessWidget {
@@ -12,6 +13,17 @@ class MedicineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
+        onPressed: () {
+          Get.to(() => MedicineNotifcationView());
+        },
+        backgroundColor: Colors.white,
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
+      ),
       appBar: AppBar(
         forceMaterialTransparency: false,
         backgroundColor: Colors.transparent,
@@ -47,7 +59,10 @@ class MedicineScreen extends StatelessWidget {
           return const Center(
             child: Text(
               "📭 لا توجد بيانات متاحة",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
             ),
           );
         }

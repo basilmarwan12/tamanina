@@ -167,13 +167,16 @@ class _EmergencyViewState extends State<EmergencyView> {
     required String label,
     required VoidCallback onPressed,
   }) {
-    return ElevatedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon),
-      label: Text(label),
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        textStyle: const TextStyle(fontSize: 16),
+    return SizedBox(
+      width: 120,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: Icon(icon),
+        label: Text(label),
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          textStyle: const TextStyle(fontSize: 15),
+        ),
       ),
     );
   }

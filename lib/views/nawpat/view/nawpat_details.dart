@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:tamanina/views/education/view/education_view.dart';
 import '../../../models/nawpat.dart';
 import '../controller/nawpat_controller.dart';
 
@@ -15,16 +17,13 @@ class NawpatDetailsScreen extends StatefulWidget {
 
 class _NawpatDetailsScreenState extends State<NawpatDetailsScreen> {
   final NawpatController _controller = Get.find<NawpatController>();
-  
-  // Text editing controllers for each field
+
   late TextEditingController nameController;
   late TextEditingController symptomsController;
   late TextEditingController typeController;
   late TextEditingController selectionController;
   late TextEditingController durationController;
   late TextEditingController locationController;
-  
-  // Map to track which fields are being edited
   Map<String, bool> editingFields = {
     'name': false,
     'symptoms': false,
@@ -33,22 +32,22 @@ class _NawpatDetailsScreenState extends State<NawpatDetailsScreen> {
     'duration': false,
     'location': false,
   };
-  
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with current values
+
     nameController = TextEditingController(text: widget.nawpat.name);
     symptomsController = TextEditingController(text: widget.nawpat.symptoms);
     typeController = TextEditingController(text: widget.nawpat.type);
     selectionController = TextEditingController(text: widget.nawpat.selection);
     durationController = TextEditingController(text: widget.nawpat.duration);
     locationController = TextEditingController(text: widget.nawpat.location);
+
+    _controller.timeText.value = widget.nawpat.date;
   }
-  
+
   @override
   void dispose() {
-    // Dispose controllers
     nameController.dispose();
     symptomsController.dispose();
     typeController.dispose();
@@ -57,16 +56,12 @@ class _NawpatDetailsScreenState extends State<NawpatDetailsScreen> {
     locationController.dispose();
     super.dispose();
   }
-  
-  // Save changes for a specific field
+
   void saveField(String field) {
-    setState(() {
-      editingFields[field] = false;
-    });
-    
-    // Create a map with only the field being updated
+    setState(() {});
+
     Map<String, dynamic> updatedData = {};
-    
+
     switch (field) {
       case 'name':
         updatedData['الاسم'] = nameController.text;
@@ -86,15 +81,18 @@ class _NawpatDetailsScreenState extends State<NawpatDetailsScreen> {
       case 'location':
         updatedData['أماكن الحدوث'] = locationController.text;
         break;
+      case 'date_time':
+        updatedData['التاريخ'] = _controller.timeText.value;
+        break;
     }
-    
-    // Call controller to update the field in Firebase
+
     _controller.editNawpat(widget.nawpat.id, updatedData);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         forceMaterialTransparency: false,
         backgroundColor: Colors.transparent,
@@ -125,93 +123,127 @@ class _NawpatDetailsScreenState extends State<NawpatDetailsScreen> {
           ),
         ),
       ),
-      body: Center(
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                blurRadius: 5,
-                spreadRadius: 2,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildEditableInfoRow("👤 الاسم:", nameController, 'name'),
-              _buildInfoRow("📅 التاريخ:", widget.nawpat.date.substring(0, 10), false),
-              _buildInfoRow("⏰ الوقت:", widget.nawpat.date.substring(11, 16), false),
-              _buildInfoRow("🗓️ اليوم:", widget.nawpat.day, false),
-              _buildEditableInfoRow("🤕 الأعراض:", symptomsController, 'symptoms'),
-              _buildEditableInfoRow("📌 النوع:", typeController, 'type'),
-              _buildEditableInfoRow("🔍 هل شعرت بها عند الحدوث؟:", selectionController, 'selection'),
-              _buildEditableInfoRow("⏳ المدة:", durationController, 'duration'),
-              _buildEditableInfoRow("📍 أماكن الحدوث:", locationController, 'location'),
-            ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Container(
+            width: double.infinity,
+            height: MediaQuery.sizeOf(context).height,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  blurRadius: 5,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildEditableInfoRow("👤 الاسم:", nameController, 'name'),
+                _buildDatePicker(_controller),
+                _buildEditableInfoRow(
+                    "🤕 الأعراض:", symptomsController, 'symptoms'),
+                _buildEditableInfoRow("📌 النوع:", typeController, 'type'),
+                _buildEditableInfoRow("🔍 هل شعرت بها عند الحدوث؟:",
+                    selectionController, 'selection'),
+                _buildEditableInfoRow(
+                    "⏳ المدة:", durationController, 'duration'),
+                _buildEditableInfoRow(
+                    "📍 أماكن الحدوث:", locationController, 'location'),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  // Non-editable info row
-  Widget _buildInfoRow(String label, String value, bool editable) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
-      child: Row(
-        textDirection: TextDirection.rtl,
-        children: [
-          Expanded(
-            child: RichText(
-              textDirection: TextDirection.rtl,
-              text: TextSpan(
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+  Widget _buildDatePicker(NawpatController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "📅 الوقت",
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            DateTime? dateTime = await showOmniDateTimePicker(
+              context: context,
+              initialDate: DateTime.tryParse(controller.timeText.value) ??
+                  DateTime.now(),
+              firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
+              lastDate: DateTime.now().add(const Duration(days: 3652)),
+              is24HourMode: false,
+              isShowSeconds: false,
+              minutesInterval: 1,
+              secondsInterval: 1,
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
+              constraints: const BoxConstraints(
+                maxWidth: 350,
+                maxHeight: 650,
+              ),
+              transitionBuilder: (context, anim1, anim2, child) {
+                return FadeTransition(
+                  opacity: anim1.drive(
+                    Tween(begin: 0, end: 1),
+                  ),
+                  child: child,
+                );
+              },
+              transitionDuration: const Duration(milliseconds: 200),
+              barrierDismissible: true,
+              selectableDayPredicate: (dateTime) {
+                return dateTime != DateTime(2023, 2, 25);
+              },
+            );
+
+            if (dateTime != null) {
+              controller.timeText.value = dateTime.toIso8601String();
+              saveField('date_time');
+            }
+          },
+          child: Container(
+            width: 300,
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.25),
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Obx(
+              () => Text(
+                controller.timeText.value.isEmpty
+                    ? "اختر التاريخ والوقت"
+                    : formatDateTime(controller.timeText.value),
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  color: Colors.black87,
                 ),
-                children: [
-                  TextSpan(
-                    text: "$label ",
-                    style: const TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.w900),
-                  ),
-                  TextSpan(
-                    text: value,
-                    style: const TextStyle(color: Colors.black87),
-                  ),
-                ],
               ),
             ),
           ),
-          if (editable)
-            IconButton(
-              icon: const Icon(Icons.edit, color: Colors.blue),
-              onPressed: () {
-                // Toggle edit mode for this field
-                setState(() {
-                  // Reset all editing fields first
-                  editingFields.forEach((key, value) {
-                    editingFields[key] = false;
-                  });
-                });
-              },
-            ),
-        ],
-      ),
+        ),
+        SizedBox(height: 20.h),
+      ],
     );
   }
-  
-  // Editable info row with edit icon
-  Widget _buildEditableInfoRow(String label, TextEditingController controller, String fieldKey) {
+
+  Widget _buildEditableInfoRow(
+      String label, TextEditingController controller, String fieldKey) {
     bool isEditing = editingFields[fieldKey] ?? false;
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
       child: Row(
@@ -221,6 +253,7 @@ class _NawpatDetailsScreenState extends State<NawpatDetailsScreen> {
               ? Expanded(
                   child: TextField(
                     controller: controller,
+                    style: TextStyle(color: Colors.black),
                     textDirection: TextDirection.rtl,
                     decoration: InputDecoration(
                       labelText: label,
