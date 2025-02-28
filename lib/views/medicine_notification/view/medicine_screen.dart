@@ -103,8 +103,11 @@ class MedicineScreen extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {
+                        _medicineController.isLoading(true);
                         _showDeleteConfirmationDialog(medicines.id);
-                      },icon: const Icon(Icons.delete),
+                        _medicineController.isLoading(false);
+                      },
+                      icon: const Icon(Icons.delete),
                     )
                   ]),
                   _buildInfoRow("💊 العلاج رقم", "${index + 1}"),
@@ -151,13 +154,14 @@ class MedicineScreen extends StatelessWidget {
       ),
     );
   }
+
   void _showDeleteConfirmationDialog(String medicineId) {
-  Get.defaultDialog(titleStyle: TextStyle(color: Colors.red),middleTextStyle: TextStyle(color: Colors.black),
+  Get.defaultDialog(
     title: "حذف الدواء",
     middleText: "هل أنت متأكد أنك تريد حذف هذا الدواء؟",
     textConfirm: "نعم",
     textCancel: "لا",
-    confirmTextColor: Colors.red,
+    confirmTextColor: Colors.white,
     cancelTextColor: Colors.black,
     buttonColor: Colors.red,
     onConfirm: () async {
@@ -178,11 +182,11 @@ void _showEditMedicineDialog(Medicine medicine) {
     title: "تعديل الدواء",
     content: Column(
       children: [
-        TextField(style: TextStyle(color: Colors.black),
+        TextField(
           controller: nameController,
           decoration: const InputDecoration(labelText: "اسم الدواء"),
         ),
-        TextField(style: TextStyle(color: Colors.black),
+        TextField(
           controller: dateController,
           decoration: const InputDecoration(labelText: "التاريخ"),
           readOnly: true,
@@ -198,7 +202,7 @@ void _showEditMedicineDialog(Medicine medicine) {
             }
           },
         ),
-        TextField(style: TextStyle(color: Colors.black),
+        TextField(
           controller: notesController,
           decoration: const InputDecoration(labelText: "الملاحظات"),
         ),
