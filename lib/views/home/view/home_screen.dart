@@ -216,30 +216,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  String _getMoodImage(int status) {
-    if (status >= 1 && status <= 3) {
-      return "assets/moods/sad.svg";
-    } else if (status >= 4 && status <= 7) {
-      return "assets/moods/neutral.svg";
-    } else if (status >= 8 && status <= 10) {
-      return "assets/moods/happy.svg";
-    } else {
-      return "assets/moods/default.svg";
-    }
-  }
-
-  Color _getMoodColor(int status) {
-    if (status >= 1 && status <= 3) {
-      return Colors.red;
-    } else if (status >= 4 && status <= 7) {
-      return Colors.orange;
-    } else if (status >= 8 && status <= 10) {
-      return Colors.green;
-    } else {
-      return Colors.grey;
-    }
-  }
-
   void _showNotificationPreview(BuildContext context) {
     showModalBottomSheet(
       context: context,

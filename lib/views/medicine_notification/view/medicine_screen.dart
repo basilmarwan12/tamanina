@@ -156,73 +156,76 @@ class MedicineScreen extends StatelessWidget {
   }
 
   void _showDeleteConfirmationDialog(String medicineId) {
-  Get.defaultDialog(
-    title: "حذف الدواء",
-    middleText: "هل أنت متأكد أنك تريد حذف هذا الدواء؟",
-    textConfirm: "نعم",
-    textCancel: "لا",
-    confirmTextColor: Colors.white,
-    cancelTextColor: Colors.black,
-    buttonColor: Colors.red,
-    onConfirm: () async {
-      await _medicineController.deleteMedicine(medicineId);
-      Get.back(); // Close the dialog
-    },
-  );
-}
-void _showEditMedicineDialog(Medicine medicine) {
-  TextEditingController nameController =
-      TextEditingController(text: medicine.name);
-  TextEditingController dateController =
-      TextEditingController(text: medicine.dateTime.toString().substring(0, 10));
-  TextEditingController notesController =
-      TextEditingController(text: medicine.notes);
+    Get.defaultDialog(
+      title: "حذف الدواء",
+      middleText: "هل أنت متأكد أنك تريد حذف هذا الدواء؟",
+      textConfirm: "نعم",
+      textCancel: "لا",
+      confirmTextColor: Colors.white,
+      cancelTextColor: Colors.black,
+      buttonColor: Colors.red,
+      onConfirm: () async {
+        await _medicineController.deleteMedicine(medicineId);
+        Get.back(); // Close the dialog
+      },
+    );
+  }
 
-  Get.defaultDialog(
-    title: "تعديل الدواء",
-    content: Column(
-      children: [
-        TextField(
-          controller: nameController,
-          decoration: const InputDecoration(labelText: "اسم الدواء"),
-        ),
-        TextField(
-          controller: dateController,
-          decoration: const InputDecoration(labelText: "التاريخ"),
-          readOnly: true,
-          onTap: () async {
-            DateTime? pickedDate = await showDatePicker(
-              context: Get.context!,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2101),
-            );
-            if (pickedDate != null) {
-              dateController.text = pickedDate.toString().substring(0, 10);
-            }
-          },
-        ),
-        TextField(
-          controller: notesController,
-          decoration: const InputDecoration(labelText: "الملاحظات"),
-        ),
-      ],
-    ),
-    textConfirm: "حفظ",
-    textCancel: "إلغاء",
-    confirmTextColor: Colors.white,
-    cancelTextColor: Colors.black,
-    buttonColor: Colors.blue,
-    onConfirm: () async {
-      await _medicineController.editMedicine(
-        medicine.id,
-        nameController.text,
-        dateController.text,
-        notesController.text,
-      );
-      Get.back();
-    },
-  );
-}
+  void _showEditMedicineDialog(Medicine medicine) {
+    TextEditingController nameController =
+        TextEditingController(text: medicine.name);
+    TextEditingController dateController = TextEditingController(
+        text: medicine.dateTime.toString().substring(0, 10));
+    TextEditingController notesController =
+        TextEditingController(text: medicine.notes);
 
+    Get.defaultDialog(
+      title: "تعديل الدواء",
+      content: Column(
+        children: [
+          TextField(
+            controller: nameController,
+            decoration: const InputDecoration(labelText: "اسم الدواء"),
+            style: TextStyle(color: Colors.black),
+          ),
+          TextField(
+            controller: dateController,
+            decoration: const InputDecoration(labelText: "التاريخ"),
+            style: TextStyle(color: Colors.black),
+            readOnly: true,
+            onTap: () async {
+              DateTime? pickedDate = await showDatePicker(
+                context: Get.context!,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2101),
+              );
+              if (pickedDate != null) {
+                dateController.text = pickedDate.toString().substring(0, 10);
+              }
+            },
+          ),
+          TextField(
+            controller: notesController,
+            style: TextStyle(color: Colors.black),
+            decoration: const InputDecoration(labelText: "الملاحظات"),
+          ),
+        ],
+      ),
+      textConfirm: "حفظ",
+      textCancel: "إلغاء",
+      confirmTextColor: Colors.white,
+      cancelTextColor: Colors.black,
+      buttonColor: Colors.blue,
+      onConfirm: () async {
+        await _medicineController.editMedicine(
+          medicine.id,
+          nameController.text,
+          dateController.text,
+          notesController.text,
+        );
+        Get.back();
+      },
+    );
+  }
 }

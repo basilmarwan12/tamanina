@@ -16,7 +16,6 @@ class MoodSelectorController extends GetxController {
   }
 
   void saveMood() {
-    // Here you would implement saving the mood to your backend or local storage
     Get.snackbar(
       'Success',
       'Your mood has been saved',
@@ -28,7 +27,7 @@ class MoodSelectorController extends GetxController {
 }
 
 class MoodSelector extends StatelessWidget {
-  MoodSelector({Key? key}) : super(key: key);
+  MoodSelector({super.key});
 
   final MoodSelectorController controller = Get.put(MoodSelectorController());
 
@@ -36,27 +35,18 @@ class MoodSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              icon: Icon(Icons.close, color: Colors.purple),
-              onPressed: () {
-                // Close action if needed
-              },
-            ),
-            Text(
-              "What is your mood today?",
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
         SizedBox(height: 20.h),
-        Obx(() => Stack(
+        Obx(
+          () => AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+            child: Stack(
+              key: ValueKey<int>(controller.moodValue.value),
               alignment: Alignment.center,
               children: [
                 Container(
@@ -78,14 +68,16 @@ class MoodSelector extends StatelessWidget {
                   ),
                 ),
               ],
-            )),
+            ),
+          ),
+        ),
         SizedBox(height: 10.h),
         Obx(() => Text(
               "${controller.moodValue.value}",
               style: TextStyle(
                 fontSize: 30.sp,
                 fontWeight: FontWeight.bold,
-                color: Colors.purple,
+                color: _colorState(controller.moodValue.value),
               ),
             )),
         SizedBox(height: 10.h),
@@ -110,49 +102,25 @@ class MoodSelector extends StatelessWidget {
           ],
         ),
         SizedBox(height: 20.h),
-        InkWell(
-          onTap: () {
-            _showNotificationSettings(context);
-          },
-          child: Text(
-            "Edit notifications",
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: Colors.purple,
-              decoration: TextDecoration.underline,
-            ),
-          ),
-        ),
-        SizedBox(height: 20.h),
-        ElevatedButton(
-          onPressed: () {
-            controller.saveMood();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.purple,
-            minimumSize: Size(double.infinity, 50.h),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.r),
-            ),
-          ),
-          child: Text(
-            "Save",
-            style: TextStyle(
-              fontSize: 18.sp,
-              color: Colors.white,
-            ),
-          ),
-        ),
       ],
     );
+  }
+
+  Color _colorState(int value) {
+    if (value <= 3) {
+      return Colors.red;
+    } else if (value <= 7) {
+      return Colors.orange;
+    } else {
+      return Colors.green;
+    }
   }
 
   Widget _buildMoodEmoji() {
     return Obx(() {
       int value = controller.moodValue.value;
-      Color emojiColor = value <= 3
-          ? Colors.red
-          : (value <= 7 ? Colors.orange : Colors.green);
+      Color emojiColor =
+          value <= 3 ? Colors.red : (value <= 7 ? Colors.orange : Colors.green);
 
       IconData emojiIcon;
       if (value <= 3) {
@@ -170,43 +138,6 @@ class MoodSelector extends StatelessWidget {
       );
     });
   }
-
-  void _showNotificationSettings(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Mood Notifications"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Obx(() => SwitchListTile(
-                  title: Text("Enable daily mood reminders"),
-                  value: controller.notificationsEnabled.value,
-                  onChanged: (value) {
-                    controller.toggleNotifications();
-                  },
-                )),
-            SizedBox(height: 10.h),
-            Text(
-              "We'll remind you to track your mood once a day",
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text("Close"),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class CircularSliderPainter extends CustomPainter {
@@ -221,13 +152,12 @@ class CircularSliderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 10;
-    
-    // Draw the track
+
     final trackPaint = Paint()
       ..color = Colors.purple.withOpacity(0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 15;
-    
+
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       _degreesToRadians(startAngle),
@@ -235,15 +165,23 @@ class CircularSliderPainter extends CustomPainter {
       false,
       trackPaint,
     );
-    
-    // Draw the progress
+
+    Color progressColor;
+    if (value <= 3) {
+      progressColor = Colors.red;
+    } else if (value <= 7) {
+      progressColor = Colors.amber;
+    } else {
+      progressColor = Colors.green;
+    }
+
     final progressPaint = Paint()
-      ..color = Colors.purple
+      ..color = progressColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 15;
-    
+
     final progressAngle = (value / 10) * (endAngle - startAngle);
-    
+
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       _degreesToRadians(startAngle),
@@ -251,21 +189,20 @@ class CircularSliderPainter extends CustomPainter {
       false,
       progressPaint,
     );
-    
-    // Draw the thumb
+
     final thumbPaint = Paint()
-      ..color = Colors.purple
+      ..color = progressColor
       ..style = PaintingStyle.fill;
-    
+
     final thumbAngle = startAngle + progressAngle;
     final thumbX = center.dx + radius * math.cos(_degreesToRadians(thumbAngle));
     final thumbY = center.dy + radius * math.sin(_degreesToRadians(thumbAngle));
-    
+
     canvas.drawCircle(Offset(thumbX, thumbY), 12, thumbPaint);
   }
-  
+
   double _degreesToRadians(double degrees) {
-    return degrees * (3.14159265359 / 180);
+    return degrees * (math.pi / 180);
   }
 
   @override
@@ -275,27 +212,26 @@ class CircularSliderPainter extends CustomPainter {
 
   @override
   bool hitTest(Offset position) {
-    // Handle touch events to update the slider value
     final center = Offset(100, 100);
     final radius = 90;
-    
+
     final dx = position.dx - center.dx;
     final dy = position.dy - center.dy;
     final distance = math.sqrt(dx * dx + dy * dy);
-    
+
     if (distance >= radius - 20 && distance <= radius + 20) {
-      final angle = math.atan2(dy, dx) * (180 / 3.14159265359);
+      final angle = math.atan2(dy, dx) * (180 / math.pi);
       final normalizedAngle = angle < 0 ? angle + 360 : angle;
-      
+
       if (normalizedAngle >= startAngle && normalizedAngle <= endAngle) {
-        final percentage = (normalizedAngle - startAngle) / (endAngle - startAngle);
+        final percentage =
+            (normalizedAngle - startAngle) / (endAngle - startAngle);
         final newValue = (percentage * 10).round();
         onChanged(newValue);
         return true;
       }
     }
-    
+
     return false;
   }
-
 }
