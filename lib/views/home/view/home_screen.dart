@@ -12,6 +12,7 @@ import 'package:tamanina/views/nawpat/view/nawpat_screen.dart';
 import 'package:tamanina/views/medicine_notification/view/medicine_screen.dart';
 
 import '../controller/home_controller.dart';
+import 'mood_selector_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -188,32 +189,20 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20.h,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(25.r),
-                border: Border.all(
-                  width: 2.w,
-                  color: Color(
-                    0xffFCC56B,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
                   ),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    "كيف حالك الان",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25.sp,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 40.h,
-                  ),
-                  Image(height: 200, image: AssetImage("assets/smile.png"))
                 ],
               ),
+              child: MoodSelector(),
             )
           ],
         ),

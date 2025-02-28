@@ -225,5 +225,4 @@ void _showEditMedicineDialog(Medicine medicine) {
   );
 }
 
-
 }
