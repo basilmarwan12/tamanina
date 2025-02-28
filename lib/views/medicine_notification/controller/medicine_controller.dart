@@ -56,6 +56,65 @@ class MedicineController extends GetxController {
     }
   }
 
+  Future<void> deleteMedicine(String medicineId) async {
+  isLoading.value = true;
+  try {
+    await firestore.collection('medicine').doc(medicineId).delete();
+
+    medicineList.removeWhere((medicine) => medicine.id == medicineId);
+
+    Get.snackbar("نجاح", "تم حذف الدواء بنجاح!");
+  } catch (e) {
+    Get.snackbar("خطأ", "فشل حذف الدواء: $e");
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+
+  
+  Future<bool> editMedicine(String id, String name, String date, String notes) async {
+    isLoading.value = true;
+    try {
+      await FirebaseFirestore.instance
+          .collection('medicine')
+          .doc(id)
+          .update({
+        "name": name,
+        "date": date,
+        "notes": notes,
+      });
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(
+            FirebaseAuth.instance.currentUser!.uid,
+          )
+          .update({
+        "medicines": FieldValue.arrayRemove([
+          {"name": name, "date": date, "notes": notes}
+        ]),
+        "medicines": FieldValue.arrayUnion([
+          {"name": name, "date": date, "notes": notes}
+        ])
+      });
+
+      // cancel previous notification
+      await flutterLocalNotificationsPlugin.cancel(id.hashCode);
+
+      // schedule new notification
+      await scheduleMedicineNotification(id, name, date);
+
+      Get.snackbar("Success", "Medicine updated successfully!");
+      return true;
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong: $e");
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> fetchMedicines(String userId) async {
     try {
       isLoading.value = true;

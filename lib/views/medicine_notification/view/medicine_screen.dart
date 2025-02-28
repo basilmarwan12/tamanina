@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:tamanina/models/medicine.dart';
 import 'package:tamanina/views/medicine_notification/controller/medicine_controller.dart';
 import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
 
@@ -93,6 +94,19 @@ class MedicineScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(children: [
+                    IconButton(
+                      onPressed: () {
+                        _showEditMedicineDialog(medicines);
+                      },
+                      icon: const Icon(Icons.edit),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        _showDeleteConfirmationDialog(medicines.id);
+                      },icon: const Icon(Icons.delete),
+                    )
+                  ]),
                   _buildInfoRow("💊 العلاج رقم", "${index + 1}"),
                   _buildInfoRow("📌 الاسم", medicines.name),
                   _buildInfoRow("📅 التاريخ",
@@ -137,4 +151,75 @@ class MedicineScreen extends StatelessWidget {
       ),
     );
   }
+  void _showDeleteConfirmationDialog(String medicineId) {
+  Get.defaultDialog(
+    title: "حذف الدواء",
+    middleText: "هل أنت متأكد أنك تريد حذف هذا الدواء؟",
+    textConfirm: "نعم",
+    textCancel: "لا",
+    confirmTextColor: Colors.white,
+    cancelTextColor: Colors.black,
+    buttonColor: Colors.red,
+    onConfirm: () async {
+      await _medicineController.deleteMedicine(medicineId);
+      Get.back(); // Close the dialog
+    },
+  );
+}
+void _showEditMedicineDialog(Medicine medicine) {
+  TextEditingController nameController =
+      TextEditingController(text: medicine.name);
+  TextEditingController dateController =
+      TextEditingController(text: medicine.dateTime.toString().substring(0, 10));
+  TextEditingController notesController =
+      TextEditingController(text: medicine.notes);
+
+  Get.defaultDialog(
+    title: "تعديل الدواء",
+    content: Column(
+      children: [
+        TextField(
+          controller: nameController,
+          decoration: const InputDecoration(labelText: "اسم الدواء"),
+        ),
+        TextField(
+          controller: dateController,
+          decoration: const InputDecoration(labelText: "التاريخ"),
+          readOnly: true,
+          onTap: () async {
+            DateTime? pickedDate = await showDatePicker(
+              context: Get.context!,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2101),
+            );
+            if (pickedDate != null) {
+              dateController.text = pickedDate.toString().substring(0, 10);
+            }
+          },
+        ),
+        TextField(
+          controller: notesController,
+          decoration: const InputDecoration(labelText: "الملاحظات"),
+        ),
+      ],
+    ),
+    textConfirm: "حفظ",
+    textCancel: "إلغاء",
+    confirmTextColor: Colors.white,
+    cancelTextColor: Colors.black,
+    buttonColor: Colors.blue,
+    onConfirm: () async {
+      await _medicineController.editMedicine(
+        medicine.id,
+        nameController.text,
+        dateController.text,
+        notesController.text,
+      );
+      Get.back();
+    },
+  );
+}
+
+
 }
