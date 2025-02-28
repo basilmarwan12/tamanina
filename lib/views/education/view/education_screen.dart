@@ -195,16 +195,26 @@ class EducationScreen extends StatelessWidget {
               decoration: const InputDecoration(labelText: "الملاحظات"),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                await _educationController.editEducation(
-                  education.id!,
-                  dateController.text,
-                  notesController.text,
-                );
-                Get.back();
-              },
-              child: const Text("حفظ"),
+            Container(
+               width: 200,
+                    height: 60,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: const Color(0xffA8BDD2),
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+              child: ElevatedButton(
+                onPressed: () async {
+                  await _educationController.editEducation(
+                    education.id!,
+                    dateController.text,
+                    notesController.text,
+                  );
+                  Get.back();
+                },
+                child: const Text("حفظ"),
+              ),
             ),
           ],
         ),
