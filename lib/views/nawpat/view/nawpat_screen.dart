@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/views/nawpat/view/add_nawpat.dart';
+import 'package:tamanina/views/nawpat/view/nawpat_details.dart';
 import '../controller/nawpat_controller.dart';
 
 class NawpatScreen extends StatelessWidget {
@@ -15,9 +16,7 @@ class NawpatScreen extends StatelessWidget {
         forceMaterialTransparency: false,
         backgroundColor: Colors.transparent,
         leading: GestureDetector(
-          onTap: () async {
-            Get.back();
-          },
+          onTap: () => Get.back(),
           child: Container(
             width: 50.w,
             height: 50.h,
@@ -83,36 +82,34 @@ class NawpatScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final nawpat = nawpatController.nawpatList[index];
 
-            return Container(
-              width: 365.w,
-              padding: const EdgeInsets.all(20),
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    blurRadius: 5,
-                    spreadRadius: 2,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildInfoRow("🔹 النوبة رقم:", "${index + 1}"),
-                  _buildInfoRow("👤 الاسم:", nawpat.name),
-                  _buildInfoRow("📅 التاريخ:", nawpat.date.substring(0, 10)),
-                  _buildInfoRow("🗓️ اليوم:", nawpat.day),
-                  _buildInfoRow("🤕 الأعراض:", nawpat.symptoms),
-                  _buildInfoRow("📌 النوع:", nawpat.type),
-                  _buildInfoRow(
-                      "🔍 هل شعرت بها عند الحدوث؟:", nawpat.selection),
-                  _buildInfoRow("⏳ المدة:", nawpat.duration),
-                  _buildInfoRow("📍 أماكن الحدوث:", nawpat.location),
-                ],
+            return GestureDetector(
+              onTap: () {
+                Get.to(() => NawpatDetailsScreen(nawpat: nawpat));
+              },
+              child: Container(
+                width: 365.w,
+                padding: const EdgeInsets.all(20),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      blurRadius: 5,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildInfoRow("👤 الاسم:", nawpat.name),
+                    _buildInfoRow("⏰ الوقت:", nawpat.date.substring(11, 16)),
+                  ],
+                ),
               ),
             );
           },
@@ -128,7 +125,7 @@ class NawpatScreen extends StatelessWidget {
         textDirection: TextDirection.rtl,
         text: TextSpan(
           style: const TextStyle(
-            fontSize: 25,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),

@@ -18,6 +18,12 @@ class HomeController extends GetxController {
     fetchNotificationCount();
   }
 
+  RxInt moodStatus = 5.obs;
+
+  void setMood(int value) {
+    moodStatus.value = value;
+  }
+
   Future<void> fetchNotificationCount() async {
     final List<ActiveNotification> activeNotifications =
         await flutterLocalNotificationsPlugin.getActiveNotifications();

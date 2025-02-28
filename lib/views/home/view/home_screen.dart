@@ -24,11 +24,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final HomeController homeController = Get.put(HomeController());
 
   List<String> image = [
-    "assets/hosp.png",
+    "assets/hospital.png",
     "assets/note.png",
     "assets/greenpill.png",
     "assets/emarg.png",
-    "assets/education.png",
+    "assets/book.png",
     "assets/inform.png",
   ];
 
@@ -176,7 +176,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(height: 10.h),
-                          Image(height: 80, image: AssetImage(image[index])),
+                          Image(
+                            height: 80,
+                            image: AssetImage(image[index]),
+                            color: image[index] == "assets/book.png"
+                                ? Colors.amber
+                                : null,
+                          ),
                         ],
                       ),
                     ),
@@ -188,30 +194,68 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20.h,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h),
+              padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 20.h),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25.r),
                 border: Border.all(
                   width: 2.w,
-                  color: Color(
-                    0xffFCC56B,
-                  ),
+                  color: const Color(0xffFCC56B),
                 ),
               ),
               child: Column(
                 children: [
                   Text(
-                    "كيف حالك الان",
+                    "كيف حالك الآن؟",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25.sp,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(
-                    height: 40.h,
-                  ),
-                  Image(height: 200, image: AssetImage("assets/smile.png"))
+                  SizedBox(height: 20.h),
+                  Obx(() {
+                    String moodImage =
+                        _getMoodImage(homeController.moodStatus.value);
+                    return SvgPicture.asset(
+                      moodImage,
+                      height: 120.h,
+                    );
+                  }),
+                  SizedBox(height: 30.h),
+                  Obx(() => Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          11,
+                          (index) => GestureDetector(
+                            onTap: () {
+                              homeController.setMood(index);
+                            },
+                            child: Container(
+                              width: 30.w,
+                              height: 30.h,
+                              margin: EdgeInsets.symmetric(horizontal: 5.w),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: homeController.moodStatus.value == index
+                                    ? _getMoodColor(index)
+                                    : Colors.grey.withOpacity(0.3),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "$index",
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      homeController.moodStatus.value == index
+                                          ? Colors.white
+                                          : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )),
                 ],
               ),
             )
@@ -219,6 +263,30 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  String _getMoodImage(int status) {
+    if (status >= 1 && status <= 3) {
+      return "assets/moods/sad.svg";
+    } else if (status >= 4 && status <= 7) {
+      return "assets/moods/neutral.svg";
+    } else if (status >= 8 && status <= 10) {
+      return "assets/moods/happy.svg";
+    } else {
+      return "assets/moods/default.svg";
+    }
+  }
+
+  Color _getMoodColor(int status) {
+    if (status >= 1 && status <= 3) {
+      return Colors.red;
+    } else if (status >= 4 && status <= 7) {
+      return Colors.orange;
+    } else if (status >= 8 && status <= 10) {
+      return Colors.green;
+    } else {
+      return Colors.grey;
+    }
   }
 
   void _showNotificationPreview(BuildContext context) {

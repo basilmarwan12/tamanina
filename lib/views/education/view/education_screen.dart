@@ -6,7 +6,8 @@ import 'package:tamanina/views/education/view/education_view.dart';
 
 class EducationScreen extends StatelessWidget {
   EducationScreen({super.key});
-  final EducationController _educationController = Get.put(EducationController());
+  final EducationController _educationController =
+      Get.put(EducationController());
 
   @override
   Widget build(BuildContext context) {
@@ -92,12 +93,15 @@ class EducationScreen extends StatelessWidget {
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => _showDeleteConfirmationDialog(education.id!),
+                      onPressed: () =>
+                          _showDeleteConfirmationDialog(education.id!),
                     )
                   ]),
                   _buildInfoRow("🔹 السجل رقم:", "${index + 1}"),
-                  _buildInfoRow("📅 التاريخ :", " ${education.date.toString().substring(0, 10)}"),
-                  _buildInfoRow("📝 الملحوظات :", education.notes ?? "لا توجد ملاحظات"),
+                  _buildInfoRow("📅 التاريخ :",
+                      " ${education.date.toString().substring(0, 10)}"),
+                  _buildInfoRow(
+                      "📝 الملحوظات :", education.notes ?? "لا توجد ملاحظات"),
                 ],
               ),
             );
@@ -121,7 +125,8 @@ class EducationScreen extends StatelessWidget {
           children: [
             TextSpan(
               text: "$label ",
-              style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.w900),
+              style: const TextStyle(
+                  color: Colors.blue, fontWeight: FontWeight.w900),
             ),
             TextSpan(
               text: value,
@@ -192,7 +197,6 @@ class EducationScreen extends StatelessWidget {
                   education.id!,
                   dateController.text,
                   notesController.text,
-                  
                 );
                 Get.back();
               },

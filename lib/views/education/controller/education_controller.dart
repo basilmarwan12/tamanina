@@ -21,21 +21,21 @@ class EducationController extends GetxController {
     fetchEducations(FirebaseAuth.instance.currentUser!.uid);
   }
 
-   Future<void> deleteEducation(String educationId) async {
-  isLoading.value = true;
-  try {
-    await firestore.collection('education').doc(educationId).delete();
+  Future<void> deleteEducation(String educationId) async {
+    isLoading.value = true;
+    try {
+      await firestore.collection('education').doc(educationId).delete();
 
-    educationList.removeWhere((education) => education.id == educationId);
+      educationList.removeWhere((education) => education.id == educationId);
 
-    Get.snackbar("نجاح", "تم حذف الدواء بنجاح!");
-    await fetchEducations(FirebaseAuth.instance.currentUser!.uid);
-  } catch (e) {
-    Get.snackbar("خطأ", "فشل حذف الدواء: $e");
-  } finally {
-    isLoading.value = false;
+      Get.snackbar("نجاح", "تم حذف الدواء بنجاح!");
+      await fetchEducations(FirebaseAuth.instance.currentUser!.uid);
+    } catch (e) {
+      Get.snackbar("خطأ", "فشل حذف الدواء: $e");
+    } finally {
+      isLoading.value = false;
+    }
   }
-}
 
   Future<bool> addEducation(String date, String notes) async {
     isLoading.value = true;
@@ -46,15 +46,6 @@ class EducationController extends GetxController {
         "date": date,
         "notes": notes,
         "userId": FirebaseAuth.instance.currentUser!.uid
-      });
-
-      await FirebaseFirestore.instance
-          .collection("users")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update({
-        "educations": FieldValue.arrayUnion([
-          {"date": date, "notes": notes}
-        ])
       });
 
       await scheduleEducationNotification(docRef.id, notes, date);
@@ -68,13 +59,11 @@ class EducationController extends GetxController {
       isLoading.value = false;
     }
   }
-  Future<bool> editEducation(String id,String date, String notes) async {
+
+  Future<bool> editEducation(String id, String date, String notes) async {
     isLoading.value = true;
     try {
-      await FirebaseFirestore.instance
-          .collection('education')
-          .doc(id)
-          .update({
+      await FirebaseFirestore.instance.collection('education').doc(id).update({
         "date": date,
         "notes": notes,
       });
@@ -118,9 +107,9 @@ class EducationController extends GetxController {
           .collection('education')
           .where('userId', isEqualTo: userId)
           .get();
-
+      print(querySnapshot.docs);
       educationList.value = querySnapshot.docs.map((doc) {
-        return Education.fromMap(doc.data() as Map<String, dynamic>);
+        return Education.fromMap(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
 
       isLoading.value = false;
