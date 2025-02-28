@@ -1,107 +1,94 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:tamanina/models/education.dart';
 import 'package:tamanina/views/education/controller/education_controller.dart';
+import 'package:tamanina/views/education/view/education_details.dart';
 import 'package:tamanina/views/education/view/education_view.dart';
 
 class EducationScreen extends StatelessWidget {
   EducationScreen({super.key});
-  final EducationController _educationController =
-      Get.put(EducationController());
+  final EducationController _controller = Get.put(EducationController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        forceMaterialTransparency: false,
-        backgroundColor: Colors.transparent,
-        leading: GestureDetector(
-          onTap: () => Get.back(),
-          child: Container(
-            width: 50.w,
-            height: 50.h,
-            margin: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(Icons.arrow_back, color: Colors.white, size: 30.sp),
-          ),
-        ),
-        centerTitle: true,
-        title: Text(
-          "سجل التعليمي",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 30.sp,
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset(
-              "assets/education.png",
-              width: 30.w,
-              height: 30.h,
-            ),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        onPressed: () {
-          Get.to(() => EducationView());
-        },
+        title: const Text("سجل التعليم"),
         backgroundColor: Colors.white,
-        child: const Icon(Icons.add, color: Colors.black),
       ),
       body: Obx(() {
-        if (_educationController.isLoading.value) {
+        if (_controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (_educationController.educationList.isEmpty) {
+        if (_controller.educationList.isEmpty) {
           return const Center(
             child: Text(
-              "لا توجد بيانات متاحة",
+              "📭 لا توجد بيانات متاحة",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           );
         }
 
         return ListView.builder(
-          itemCount: _educationController.educationList.length,
+          itemCount: _controller.educationList.length,
           itemBuilder: (context, index) {
-            final education = _educationController.educationList[index];
+            final education = _controller.educationList[index];
 
             return Container(
               width: 365.w,
-              padding: const EdgeInsets.only(right: 20, top: 10),
-              margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
+              padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 8,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(children: [
-                    IconButton(
-                      onPressed: () => _showEditEducationDialog(education),
-                      icon: const Icon(Icons.edit, color: Colors.blue),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _showEditEducationDialog(education);
+                        },
+                        icon: const Icon(Icons.edit, color: Colors.blue),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _showDeleteConfirmationDialog(education.id ?? "");
+                        },
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () => Get.to(
+                        () => EducationDetailScreen(education: education)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInfoRow(
+                            "📅 التاريخ", formatDateTime(education.date ?? "")),
+                        _buildInfoRow(
+                          "📝 الملاحظات",
+                          education.notes?.isEmpty ?? true
+                              ? "لا توجد ملاحظات"
+                              : education.notes!,
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () =>
-                          _showDeleteConfirmationDialog(education.id!),
-                    )
-                  ]),
-                  _buildInfoRow("🔹 السجل رقم:", "${index + 1}"),
-                  _buildInfoRow("📅 التاريخ :",
-                      " ${education.date.toString().substring(0, 10)}"),
-                  _buildInfoRow(
-                      "📝 الملحوظات :", education.notes ?? "لا توجد ملاحظات"),
+                  ),
                 ],
               ),
             );
@@ -118,13 +105,13 @@ class EducationScreen extends StatelessWidget {
         textDirection: TextDirection.rtl,
         text: TextSpan(
           style: const TextStyle(
-            fontSize: 25,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
           children: [
             TextSpan(
-              text: "$label ",
+              text: "$label: ",
               style: const TextStyle(
                   color: Colors.blue, fontWeight: FontWeight.w900),
             ),
@@ -140,75 +127,68 @@ class EducationScreen extends StatelessWidget {
 
   void _showDeleteConfirmationDialog(String educationId) {
     Get.defaultDialog(
-      titleStyle: TextStyle(color: Colors.red),
-      middleTextStyle: TextStyle(color: Colors.black),
-      title: "حذف السجل التعليمي",
+      title: "حذف السجل",
       middleText: "هل أنت متأكد أنك تريد حذف هذا السجل؟",
       textConfirm: "نعم",
       textCancel: "لا",
-      confirmTextColor: Colors.red,
+      confirmTextColor: Colors.white,
       cancelTextColor: Colors.black,
       buttonColor: Colors.red,
       onConfirm: () async {
-        await _educationController.deleteEducation(educationId);
+        await _controller.deleteEducation(educationId);
         Get.back(); // Close the dialog
       },
     );
   }
 
-  void _showEditEducationDialog(var education) {
+  void _showEditEducationDialog(Education education) {
     TextEditingController dateController =
-        TextEditingController(text: education.date.toString().substring(0, 10));
+        TextEditingController(text: education.date);
     TextEditingController notesController =
         TextEditingController(text: education.notes);
 
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              style: TextStyle(color: Colors.black),
-              controller: dateController,
-              decoration: const InputDecoration(labelText: "التاريخ"),
-              readOnly: true,
-              onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: Get.context!,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2101),
-                );
-                if (pickedDate != null) {
-                  dateController.text = pickedDate.toString().substring(0, 10);
-                }
-              },
-            ),
-            TextField(
-              controller: notesController,
-              style: TextStyle(color: Colors.black),
-              decoration: const InputDecoration(labelText: "الملاحظات"),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                await _educationController.editEducation(
-                  education.id!,
-                  dateController.text,
-                  notesController.text,
-                );
-                Get.back();
-              },
-              child: const Text("حفظ"),
-            ),
-          ],
-        ),
+    Get.defaultDialog(
+      title: "تعديل السجل",
+      content: Column(
+        children: [
+          TextField(
+            controller: dateController,
+            decoration: const InputDecoration(labelText: "التاريخ"),
+            style: TextStyle(color: Colors.black),
+            readOnly: true,
+            onTap: () async {
+              DateTime? pickedDate = await showDatePicker(
+                context: Get.context!,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2101),
+              );
+              if (pickedDate != null) {
+                dateController.text =
+                    pickedDate.toIso8601String().substring(0, 10);
+              }
+            },
+          ),
+          TextField(
+            controller: notesController,
+            decoration: const InputDecoration(labelText: "الملاحظات"),
+            style: TextStyle(color: Colors.black),
+          ),
+        ],
       ),
+      textConfirm: "حفظ",
+      textCancel: "إلغاء",
+      confirmTextColor: Colors.white,
+      cancelTextColor: Colors.black,
+      buttonColor: Colors.blue,
+      onConfirm: () async {
+        await _controller.editEducation(
+          education.id ?? "",
+          dateController.text,
+          notesController.text,
+        );
+        Get.back();
+      },
     );
   }
 }

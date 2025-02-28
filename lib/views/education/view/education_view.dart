@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tamanina/views/education/controller/education_controller.dart';
 
 class EducationView extends StatelessWidget {

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/models/medicine.dart';
 import 'package:tamanina/views/medicine_notification/controller/medicine_controller.dart';
-import 'package:tamanina/views/medicine_notification/view/medicine_notification.dart';
+import 'medicine_details.dart';
 
 class MedicineScreen extends StatelessWidget {
   MedicineScreen({super.key});
@@ -37,24 +37,6 @@ class MedicineScreen extends StatelessWidget {
             fontSize: 30.sp,
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset(
-              "assets/greenpill.png",
-              width: 30.w,
-              height: 30.h,
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        onPressed: () {
-          Get.to(() => MedicineNotifcationView());
-        },
-        backgroundColor: Colors.white,
-        child: const Icon(Icons.add, color: Colors.black),
       ),
       body: Obx(() {
         if (_medicineController.isLoading.value) {
@@ -73,7 +55,7 @@ class MedicineScreen extends StatelessWidget {
         return ListView.builder(
           itemCount: _medicineController.medicineList.length,
           itemBuilder: (context, index) {
-            final medicines = _medicineController.medicineList[index];
+            final medicine = _medicineController.medicineList[index];
 
             return Container(
               width: 365.w,
@@ -94,31 +76,37 @@ class MedicineScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(children: [
-                    IconButton(
-                      onPressed: () {
-                        _showEditMedicineDialog(medicines);
-                      },
-                      icon: const Icon(Icons.edit),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _showEditMedicineDialog(medicine);
+                        },
+                        icon: const Icon(Icons.edit, color: Colors.blue),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _showDeleteConfirmationDialog(medicine.id ?? "");
+                        },
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        Get.to(() => MedicineDetailScreen(medicine: medicine)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInfoRow("📌 الاسم", medicine.name),
+                        _buildInfoRow(
+                          "📅 التاريخ",
+                          medicine.dateTime.toString().substring(0, 10),
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      onPressed: () {
-                        _medicineController.isLoading(true);
-                        _showDeleteConfirmationDialog(medicines.id);
-                        _medicineController.isLoading(false);
-                      },
-                      icon: const Icon(Icons.delete),
-                    )
-                  ]),
-                  _buildInfoRow("💊 العلاج رقم", "${index + 1}"),
-                  _buildInfoRow("📌 الاسم", medicines.name),
-                  _buildInfoRow("📅 التاريخ",
-                      medicines.dateTime.toString().substring(0, 10)),
-                  _buildInfoRow(
-                      "📝 الملاحظات",
-                      medicines.notes.isEmpty
-                          ? "لا توجد ملاحظات"
-                          : medicines.notes),
+                  ),
                 ],
               ),
             );
@@ -135,7 +123,7 @@ class MedicineScreen extends StatelessWidget {
         textDirection: TextDirection.rtl,
         text: TextSpan(
           style: const TextStyle(
-            fontSize: 25,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -166,7 +154,7 @@ class MedicineScreen extends StatelessWidget {
       buttonColor: Colors.red,
       onConfirm: () async {
         await _medicineController.deleteMedicine(medicineId);
-        Get.back(); // Close the dialog
+        Get.back();
       },
     );
   }
@@ -175,7 +163,8 @@ class MedicineScreen extends StatelessWidget {
     TextEditingController nameController =
         TextEditingController(text: medicine.name);
     TextEditingController dateController = TextEditingController(
-        text: medicine.dateTime.toString().substring(0, 10));
+      text: medicine.dateTime.toString().substring(0, 10),
+    );
     TextEditingController notesController =
         TextEditingController(text: medicine.notes);
 
@@ -219,7 +208,7 @@ class MedicineScreen extends StatelessWidget {
       buttonColor: Colors.blue,
       onConfirm: () async {
         await _medicineController.editMedicine(
-          medicine.id,
+          medicine.id ?? "",
           nameController.text,
           dateController.text,
           notesController.text,
