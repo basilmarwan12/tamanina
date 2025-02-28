@@ -64,6 +64,7 @@ class MedicineController extends GetxController {
     medicineList.removeWhere((medicine) => medicine.id == medicineId);
 
     Get.snackbar("نجاح", "تم حذف الدواء بنجاح!");
+    await fetchMedicines(FirebaseAuth.instance.currentUser!.uid);
   } catch (e) {
     Get.snackbar("خطأ", "فشل حذف الدواء: $e");
   } finally {
@@ -106,6 +107,7 @@ class MedicineController extends GetxController {
       await scheduleMedicineNotification(id, name, date);
 
       Get.snackbar("Success", "Medicine updated successfully!");
+      await fetchMedicines(FirebaseAuth.instance.currentUser!.uid);
       return true;
     } catch (e) {
       Get.snackbar("Error", "Something went wrong: $e");
