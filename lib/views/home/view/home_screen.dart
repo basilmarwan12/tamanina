@@ -12,6 +12,7 @@ import 'package:tamanina/views/nawpat/view/nawpat_screen.dart';
 import 'package:tamanina/views/medicine_notification/view/medicine_screen.dart';
 
 import '../controller/home_controller.dart';
+import 'mood_selector_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -194,70 +195,20 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20.h,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 20.h),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(25.r),
-                border: Border.all(
-                  width: 2.w,
-                  color: const Color(0xffFCC56B),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    "كيف حالك الآن؟",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25.sp,
-                      color: Colors.black,
-                    ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
                   ),
-                  SizedBox(height: 20.h),
-                  Obx(() {
-                    String moodImage =
-                        _getMoodImage(homeController.moodStatus.value);
-                    return SvgPicture.asset(
-                      moodImage,
-                      height: 120.h,
-                    );
-                  }),
-                  SizedBox(height: 30.h),
-                  Obx(() => Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          11,
-                          (index) => GestureDetector(
-                            onTap: () {
-                              homeController.setMood(index);
-                            },
-                            child: Container(
-                              width: 30.w,
-                              height: 30.h,
-                              margin: EdgeInsets.symmetric(horizontal: 5.w),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: homeController.moodStatus.value == index
-                                    ? _getMoodColor(index)
-                                    : Colors.grey.withOpacity(0.3),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                "$index",
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color:
-                                      homeController.moodStatus.value == index
-                                          ? Colors.white
-                                          : Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )),
                 ],
               ),
+              child: MoodSelector(),
             )
           ],
         ),

@@ -140,11 +140,13 @@ class EducationScreen extends StatelessWidget {
 
   void _showDeleteConfirmationDialog(String educationId) {
     Get.defaultDialog(
+      titleStyle: TextStyle(color: Colors.red),
+      middleTextStyle: TextStyle(color: Colors.black),
       title: "حذف السجل التعليمي",
       middleText: "هل أنت متأكد أنك تريد حذف هذا السجل؟",
       textConfirm: "نعم",
       textCancel: "لا",
-      confirmTextColor: Colors.white,
+      confirmTextColor: Colors.red,
       cancelTextColor: Colors.black,
       buttonColor: Colors.red,
       onConfirm: () async {
@@ -171,6 +173,7 @@ class EducationScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
+              style: TextStyle(color: Colors.black),
               controller: dateController,
               decoration: const InputDecoration(labelText: "التاريخ"),
               readOnly: true,
@@ -188,6 +191,7 @@ class EducationScreen extends StatelessWidget {
             ),
             TextField(
               controller: notesController,
+              style: TextStyle(color: Colors.black),
               decoration: const InputDecoration(labelText: "الملاحظات"),
             ),
             const SizedBox(height: 16),
