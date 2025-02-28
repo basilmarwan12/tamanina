@@ -152,12 +152,12 @@ class MedicineScreen extends StatelessWidget {
     );
   }
   void _showDeleteConfirmationDialog(String medicineId) {
-  Get.defaultDialog(
+  Get.defaultDialog(titleStyle: TextStyle(color: Colors.red),middleTextStyle: TextStyle(color: Colors.black),
     title: "حذف الدواء",
     middleText: "هل أنت متأكد أنك تريد حذف هذا الدواء؟",
     textConfirm: "نعم",
     textCancel: "لا",
-    confirmTextColor: Colors.white,
+    confirmTextColor: Colors.red,
     cancelTextColor: Colors.black,
     buttonColor: Colors.red,
     onConfirm: () async {
@@ -178,11 +178,11 @@ void _showEditMedicineDialog(Medicine medicine) {
     title: "تعديل الدواء",
     content: Column(
       children: [
-        TextField(
+        TextField(style: TextStyle(color: Colors.black),
           controller: nameController,
           decoration: const InputDecoration(labelText: "اسم الدواء"),
         ),
-        TextField(
+        TextField(style: TextStyle(color: Colors.black),
           controller: dateController,
           decoration: const InputDecoration(labelText: "التاريخ"),
           readOnly: true,
@@ -198,7 +198,7 @@ void _showEditMedicineDialog(Medicine medicine) {
             }
           },
         ),
-        TextField(
+        TextField(style: TextStyle(color: Colors.black),
           controller: notesController,
           decoration: const InputDecoration(labelText: "الملاحظات"),
         ),
