@@ -13,15 +13,12 @@ class ProfileController extends GetxController {
   final TextEditingController seizureTypeController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
 
-  // Loading state
   final RxBool isLoading = false.obs;
-  
-  // Firebase instances
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  
-  // User service
-  final UserService _userService = Get.find<UserService>();
+
+  final UserService _userService = Get.put(UserService());
 
   @override
   void onInit() {
@@ -31,7 +28,6 @@ class ProfileController extends GetxController {
 
   @override
   void onClose() {
-    // Dispose controllers to prevent memory leaks
     firstNameController.dispose();
     lastNameController.dispose();
     emailController.dispose();
@@ -42,16 +38,13 @@ class ProfileController extends GetxController {
     super.onClose();
   }
 
-  // Load user data from Firebase Auth and Firestore
   void loadUserData() async {
     try {
       final User? currentUser = _auth.currentUser;
-      
+
       if (currentUser != null) {
-        // Fill email field
         emailController.text = currentUser.email ?? '';
-        
-        // If display name is available, try to split it into first and last name
+
         if (currentUser.displayName != null) {
           final nameParts = currentUser.displayName!.split(' ');
           if (nameParts.length > 1) {
@@ -61,17 +54,18 @@ class ProfileController extends GetxController {
             firstNameController.text = currentUser.displayName!;
           }
         }
-        
-        // Fetch additional user data from Firestore
+
         try {
-          DocumentSnapshot userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
-          
+          DocumentSnapshot userDoc =
+              await _firestore.collection('users').doc(currentUser.uid).get();
+
           if (userDoc.exists) {
-            Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-            
-            // Populate the controllers with data from Firestore
+            Map<String, dynamic> userData =
+                userDoc.data() as Map<String, dynamic>;
+
             seizureStartController.text = userData['seizureStart'] ?? '';
-            occurrencesController.text = userData['occurrences']?.toString() ?? '';
+            occurrencesController.text =
+                userData['occurrences']?.toString() ?? '';
             seizureTypeController.text = userData['seizureType'] ?? '';
             genderController.text = userData['gender'] ?? '';
           }
@@ -94,24 +88,22 @@ class ProfileController extends GetxController {
     }
   }
 
-  // Update user profile in both Firebase Auth and Firestore
   Future<bool> updateUserProfile() async {
     isLoading.value = true;
-    
+
     try {
       final User? currentUser = _auth.currentUser;
-      
+
       if (currentUser != null) {
-        // Update display name (combining first and last name)
-        final String fullName = '${firstNameController.text} ${lastNameController.text}'.trim();
+        final String fullName =
+            '${firstNameController.text} ${lastNameController.text}'.trim();
         await currentUser.updateDisplayName(fullName);
-        
-        // Update email if it has changed
-        if (currentUser.email != emailController.text && emailController.text.isNotEmpty) {
+
+        if (currentUser.email != emailController.text &&
+            emailController.text.isNotEmpty) {
           await currentUser.verifyBeforeUpdateEmail(emailController.text);
         }
-        
-        // Update user data in Firestore
+
         await _firestore.collection('users').doc(currentUser.uid).update({
           'name': fullName,
           'email': emailController.text,
@@ -121,16 +113,15 @@ class ProfileController extends GetxController {
           'gender': genderController.text,
           'updatedAt': FieldValue.serverTimestamp(),
         });
-        
-        // Update the user in the UserService
+
         _userService.login(currentUser);
-        
+
         Get.snackbar(
           'نجاح',
           'تم تحديث بيانات المستخدم بنجاح',
           backgroundColor: Colors.green,
         );
-        
+
         return true;
       } else {
         Get.snackbar(
@@ -142,7 +133,7 @@ class ProfileController extends GetxController {
       }
     } catch (e) {
       String errorMessage = 'حدث خطأ أثناء تحديث بيانات المستخدم';
-      
+
       if (e is FirebaseAuthException) {
         switch (e.code) {
           case 'requires-recent-login':
@@ -158,13 +149,13 @@ class ProfileController extends GetxController {
             errorMessage = 'حدث خطأ: ${e.code}';
         }
       }
-      
+
       Get.snackbar(
         'خطأ',
         errorMessage,
         backgroundColor: Colors.red,
       );
-      
+
       return false;
     } finally {
       isLoading.value = false;

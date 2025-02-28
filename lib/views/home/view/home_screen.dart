@@ -47,31 +47,41 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         forceMaterialTransparency: false,
         backgroundColor: Colors.transparent,
-        leading: GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: Container(
-            width: 50.w,
-            height: 50.h,
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.black,
-                width: 1.w,
+        leadingWidth: 200,
+        leading: Row(
+          children: [
+            IconButton(
+                onPressed: () async {
+                  await homeController.logout();
+                },
+                icon: Icon(Icons.logout)),
+            GestureDetector(
+              onTap: () => Navigator.of(context).pop(),
+              child: Container(
+                width: 50.w,
+                height: 50.h,
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1.w,
+                  ),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Get.to(() => ProfileScreen());
+                  },
+                  child: ImageIcon(
+                    AssetImage("assets/person_icon.png"),
+                    color: Colors.black,
+                    size: 20.sp,
+                  ),
+                ),
               ),
             ),
-            child: InkWell(
-              onTap: () {
-                Get.to(() => ProfileScreen());
-              },
-              child: ImageIcon(
-                AssetImage("assets/person_icon.png"),
-                color: Colors.black,
-                size: 20.sp,
-              ),
-            ),
-          ),
+          ],
         ),
         actions: [
           Obx(() => Stack(
@@ -199,9 +209,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 60.h,
+                    height: 40.h,
                   ),
-                  SvgPicture.asset("assets/emo.svg")
+                  Image(height: 200, image: AssetImage("assets/smile.png"))
                 ],
               ),
             )

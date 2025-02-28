@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/services/user_services.dart';
 
+import '../../../cache/shared_cache.dart';
+import '../../home/view/home_screen.dart';
+
 class LoginController extends GetxController {
   RxBool isLoading = false.obs;
   final UserService _service = Get.put(UserService());
@@ -24,12 +27,20 @@ class LoginController extends GetxController {
 
       if (user != null && user.emailVerified) {
         _service.login(user);
+
+        await StorageService.saveLoginState(true);
+
+        Get.offAll(() => HomeScreen());
+
         Get.snackbar("نجاح", "تم تسجيل الدخول بنجاح!",
             backgroundColor: Colors.green);
-        print("User UID: ${user.uid}");
+        print("✅ User UID: ${user.uid}");
         return true;
+      } else {
+        Get.snackbar("تحقق من البريد", "يجب عليك تأكيد بريدك الإلكتروني أولًا!",
+            backgroundColor: Colors.orange);
+        return false;
       }
-      return false;
     } on FirebaseAuthException catch (e) {
       _handleAuthError(e);
       return false;

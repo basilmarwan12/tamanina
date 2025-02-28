@@ -78,30 +78,25 @@ class _AddDataOfNawpatState extends State<AddDataOfNawpat> {
                   },
                   child: Obx(
                     () => Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10.w),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 71, 32, 201),
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      width: 200,
+                      height: 60,
                       alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: const Color(0xffA8BDD2),
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(25)),
                       child: _controller.isLoading.value
-                          ? const SizedBox(
-                              height: 25,
-                              width: 25,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                backgroundColor: Colors.blueGrey,
-                                strokeWidth: 1.5,
-                              ),
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor: Colors.blueGrey,
+                              strokeWidth: 1.5,
                             )
                           : Text(
-                              "إضافة",
+                              "حفظ",
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 25.sp,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
                     ),

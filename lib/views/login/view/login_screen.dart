@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tamanina/views/home/view/home_screen.dart';
-import 'package:tamanina/views/nawpat/view/nawpat_screen.dart';
-import 'package:tamanina/views/profile/view/profile_screen.dart';
-import 'package:tamanina/some_information_screen.dart';
 import 'package:tamanina/views/login/controller/login_controller.dart';
 import 'package:tamanina/welcome_screen.dart';
 
@@ -29,17 +26,17 @@ class LoginScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/main_image.png"), fit: BoxFit.fill),
+        ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 10.h),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image(
-                image: AssetImage("assets/main_image.png"),
-                width: 352.w,
-                height: 550.h,
-              ),
               Text(
                 "اهلا بالعودة",
                 style: TextStyle(fontSize: 30, color: Colors.black),

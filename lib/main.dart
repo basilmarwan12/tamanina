@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:tamanina/views/home/view/home_screen.dart';
 import 'package:tamanina/welcome_screen.dart';
 import 'package:workmanager/workmanager.dart';
+import 'cache/shared_cache.dart';
 import 'firebase_options.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
@@ -42,13 +43,17 @@ void main() async {
   if (await Permission.notification.isGranted) {
     print("✅ إذن التنبيه الدقيق ممنوح بالفعل");
   }
+  WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const MyApp());
+  bool isLoggedIn = await StorageService.getLoginState();
+
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
 
+  const MyApp({super.key, required this.isLoggedIn});
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -83,7 +88,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Cairo',
             textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
           ),
-          home: WelcomeScreen(),
+          home: isLoggedIn ? HomeScreen() : WelcomeScreen(),
         );
       },
     );
