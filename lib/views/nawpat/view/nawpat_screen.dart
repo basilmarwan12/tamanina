@@ -106,6 +106,9 @@ class NawpatScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    IconButton(onPressed:(){
+                      nawpatController.deleteNawpat(nawpat.id);
+                    },icon:Icon(Icons.delete,color: Colors.red,) ),
                     _buildInfoRow("👤 الاسم:", nawpat.name),
                     _buildInfoRow("⏰ الوقت:", nawpat.date.substring(11, 16)),
                   ],

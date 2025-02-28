@@ -2,11 +2,95 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../models/nawpat.dart';
+import '../controller/nawpat_controller.dart';
 
-class NawpatDetailsScreen extends StatelessWidget {
+class NawpatDetailsScreen extends StatefulWidget {
   final Nawpat nawpat;
 
   const NawpatDetailsScreen({super.key, required this.nawpat});
+
+  @override
+  State<NawpatDetailsScreen> createState() => _NawpatDetailsScreenState();
+}
+
+class _NawpatDetailsScreenState extends State<NawpatDetailsScreen> {
+  final NawpatController _controller = Get.find<NawpatController>();
+  
+  // Text editing controllers for each field
+  late TextEditingController nameController;
+  late TextEditingController symptomsController;
+  late TextEditingController typeController;
+  late TextEditingController selectionController;
+  late TextEditingController durationController;
+  late TextEditingController locationController;
+  
+  // Map to track which fields are being edited
+  Map<String, bool> editingFields = {
+    'name': false,
+    'symptoms': false,
+    'type': false,
+    'selection': false,
+    'duration': false,
+    'location': false,
+  };
+  
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers with current values
+    nameController = TextEditingController(text: widget.nawpat.name);
+    symptomsController = TextEditingController(text: widget.nawpat.symptoms);
+    typeController = TextEditingController(text: widget.nawpat.type);
+    selectionController = TextEditingController(text: widget.nawpat.selection);
+    durationController = TextEditingController(text: widget.nawpat.duration);
+    locationController = TextEditingController(text: widget.nawpat.location);
+  }
+  
+  @override
+  void dispose() {
+    // Dispose controllers
+    nameController.dispose();
+    symptomsController.dispose();
+    typeController.dispose();
+    selectionController.dispose();
+    durationController.dispose();
+    locationController.dispose();
+    super.dispose();
+  }
+  
+  // Save changes for a specific field
+  void saveField(String field) {
+    setState(() {
+      editingFields[field] = false;
+    });
+    
+    // Create a map with only the field being updated
+    Map<String, dynamic> updatedData = {};
+    
+    switch (field) {
+      case 'name':
+        updatedData['الاسم'] = nameController.text;
+        break;
+      case 'symptoms':
+        updatedData['الاعراض'] = symptomsController.text;
+        break;
+      case 'type':
+        updatedData['النوع'] = typeController.text;
+        break;
+      case 'selection':
+        updatedData['هل شعرت بها عند الحدوث؟'] = selectionController.text;
+        break;
+      case 'duration':
+        updatedData['المدة'] = durationController.text;
+        break;
+      case 'location':
+        updatedData['أماكن الحدوث'] = locationController.text;
+        break;
+    }
+    
+    // Call controller to update the field in Firebase
+    _controller.editNawpat(widget.nawpat.id, updatedData);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,15 +144,15 @@ class NawpatDetailsScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildInfoRow("👤 الاسم:", nawpat.name),
-              _buildInfoRow("📅 التاريخ:", nawpat.date.substring(0, 10)),
-              _buildInfoRow("⏰ الوقت:", nawpat.date.substring(11, 16)),
-              _buildInfoRow("🗓️ اليوم:", nawpat.day),
-              _buildInfoRow("🤕 الأعراض:", nawpat.symptoms),
-              _buildInfoRow("📌 النوع:", nawpat.type),
-              _buildInfoRow("🔍 هل شعرت بها عند الحدوث؟:", nawpat.selection),
-              _buildInfoRow("⏳ المدة:", nawpat.duration),
-              _buildInfoRow("📍 أماكن الحدوث:", nawpat.location),
+              _buildEditableInfoRow("👤 الاسم:", nameController, 'name'),
+              _buildInfoRow("📅 التاريخ:", widget.nawpat.date.substring(0, 10), false),
+              _buildInfoRow("⏰ الوقت:", widget.nawpat.date.substring(11, 16), false),
+              _buildInfoRow("🗓️ اليوم:", widget.nawpat.day, false),
+              _buildEditableInfoRow("🤕 الأعراض:", symptomsController, 'symptoms'),
+              _buildEditableInfoRow("📌 النوع:", typeController, 'type'),
+              _buildEditableInfoRow("🔍 هل شعرت بها عند الحدوث؟:", selectionController, 'selection'),
+              _buildEditableInfoRow("⏳ المدة:", durationController, 'duration'),
+              _buildEditableInfoRow("📍 أماكن الحدوث:", locationController, 'location'),
             ],
           ),
         ),
@@ -76,29 +160,117 @@ class NawpatDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
+  // Non-editable info row
+  Widget _buildInfoRow(String label, String value, bool editable) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
-      child: RichText(
+      child: Row(
         textDirection: TextDirection.rtl,
-        text: TextSpan(
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+        children: [
+          Expanded(
+            child: RichText(
+              textDirection: TextDirection.rtl,
+              text: TextSpan(
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                children: [
+                  TextSpan(
+                    text: "$label ",
+                    style: const TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.w900),
+                  ),
+                  TextSpan(
+                    text: value,
+                    style: const TextStyle(color: Colors.black87),
+                  ),
+                ],
+              ),
+            ),
           ),
-          children: [
-            TextSpan(
-              text: "$label ",
-              style: const TextStyle(
-                  color: Colors.blue, fontWeight: FontWeight.w900),
+          if (editable)
+            IconButton(
+              icon: const Icon(Icons.edit, color: Colors.blue),
+              onPressed: () {
+                // Toggle edit mode for this field
+                setState(() {
+                  // Reset all editing fields first
+                  editingFields.forEach((key, value) {
+                    editingFields[key] = false;
+                  });
+                });
+              },
             ),
-            TextSpan(
-              text: value,
-              style: const TextStyle(color: Colors.black87),
-            ),
-          ],
-        ),
+        ],
+      ),
+    );
+  }
+  
+  // Editable info row with edit icon
+  Widget _buildEditableInfoRow(String label, TextEditingController controller, String fieldKey) {
+    bool isEditing = editingFields[fieldKey] ?? false;
+    
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+      child: Row(
+        textDirection: TextDirection.rtl,
+        children: [
+          isEditing
+              ? Expanded(
+                  child: TextField(
+                    controller: controller,
+                    textDirection: TextDirection.rtl,
+                    decoration: InputDecoration(
+                      labelText: label,
+                      labelStyle: const TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                )
+              : Expanded(
+                  child: RichText(
+                    textDirection: TextDirection.rtl,
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: "$label ",
+                          style: const TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.w900),
+                        ),
+                        TextSpan(
+                          text: controller.text,
+                          style: const TextStyle(color: Colors.black87),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+          isEditing
+              ? IconButton(
+                  icon: const Icon(Icons.save, color: Colors.green),
+                  onPressed: () => saveField(fieldKey),
+                )
+              : IconButton(
+                  icon: const Icon(Icons.edit, color: Colors.blue),
+                  onPressed: () {
+                    setState(() {
+                      editingFields.forEach((key, value) {
+                        editingFields[key] = false;
+                      });
+                      editingFields[fieldKey] = true;
+                    });
+                  },
+                ),
+        ],
       ),
     );
   }

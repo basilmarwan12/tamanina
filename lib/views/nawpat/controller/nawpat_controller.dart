@@ -45,6 +45,40 @@ class NawpatController extends GetxController {
       Get.snackbar("خطأ", "فشل تحميل بيانات النوبات: $e");
     }
   }
+  
+  Future<void> deleteNawpat(String id) async {
+    try {
+      isLoading.value = true;
+
+      await firestore.collection('nawpat').doc(id).delete();
+
+      isLoading.value = false;
+      Get.snackbar('نجاح', 'تم حذف النوبة بنجاح',
+          backgroundColor: Colors.green);
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar("خطأ", "فشل حذف النوبة: $e");
+    }
+  }
+  
+  Future<void> editNawpat(String id, Map<String, dynamic> updatedData) async {
+    try {
+      isLoading.value = true;
+
+      // Update the document in Firestore
+      await firestore.collection('nawpat').doc(id).update(updatedData);
+      
+      // Refresh the nawpat list to reflect changes
+      await fetchNawpatData(FirebaseAuth.instance.currentUser!.uid);
+
+      isLoading.value = false;
+      Get.snackbar('نجاح', 'تم تحديث البيانات بنجاح',
+          backgroundColor: Colors.green);
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar("خطأ", "فشل تحديث البيانات: $e");
+    }
+  }
 
   Future<void> addNawpatData() async {
     try {
