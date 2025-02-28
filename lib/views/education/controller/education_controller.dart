@@ -21,6 +21,22 @@ class EducationController extends GetxController {
     fetchEducations(FirebaseAuth.instance.currentUser!.uid);
   }
 
+   Future<void> deleteEducation(String educationId) async {
+  isLoading.value = true;
+  try {
+    await firestore.collection('education').doc(educationId).delete();
+
+    educationList.removeWhere((education) => education.id == educationId);
+
+    Get.snackbar("نجاح", "تم حذف الدواء بنجاح!");
+    await fetchEducations(FirebaseAuth.instance.currentUser!.uid);
+  } catch (e) {
+    Get.snackbar("خطأ", "فشل حذف الدواء: $e");
+  } finally {
+    isLoading.value = false;
+  }
+}
+
   Future<bool> addEducation(String date, String notes) async {
     isLoading.value = true;
     try {
@@ -47,6 +63,47 @@ class EducationController extends GetxController {
       return true;
     } catch (e) {
       Get.snackbar("خطأ", "حدث خطأ أثناء إضافة التذكير الدراسي: $e");
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+  Future<bool> editEducation(String id,String date, String notes) async {
+    isLoading.value = true;
+    try {
+      await FirebaseFirestore.instance
+          .collection('education')
+          .doc(id)
+          .update({
+        "date": date,
+        "notes": notes,
+      });
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(
+            FirebaseAuth.instance.currentUser!.uid,
+          )
+          .update({
+        "education": FieldValue.arrayRemove([
+          {"date": date, "notes": notes}
+        ]),
+        "education": FieldValue.arrayUnion([
+          {"date": date, "notes": notes}
+        ])
+      });
+
+      // // cancel previous notification
+      // await flutterLocalNotificationsPlugin.cancel(id.hashCode);
+
+      // // schedule new notification
+      // await scheduleEducationNotification(id, notes, date);
+
+      Get.snackbar("Success", "Education updated successfully!");
+      await fetchEducations(FirebaseAuth.instance.currentUser!.uid);
+      return true;
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong: $e");
       return false;
     } finally {
       isLoading.value = false;
