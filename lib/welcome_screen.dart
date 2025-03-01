@@ -66,7 +66,7 @@ class WelcomeScreen extends StatelessWidget {
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.circular(25)),
                   child: const Text(
-                    "انشاء حساب ؟",
+                    "انشاء حساب ",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 25,

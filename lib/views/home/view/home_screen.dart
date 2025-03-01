@@ -13,6 +13,7 @@ import 'package:tamanina/views/medicine_notification/view/medicine_screen.dart';
 
 import '../controller/home_controller.dart';
 import 'mood_selector_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -271,6 +272,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _toNavigate(int index) {
     switch (index) {
+      case 0:
+        _openGoogleMaps();
+        break;
       case 1:
         Get.to(() => NawpatScreen());
         break;
@@ -286,6 +290,18 @@ class _HomeScreenState extends State<HomeScreen> {
       case 5:
         Get.to(() => SomeInformationScreen());
         break;
+    }
+  }
+
+  void _openGoogleMaps() async {
+    final Uri googleMapsUri = Uri.parse("geo:26.8206,30.8025?q=Egypt");
+
+    if (await canLaunchUrl(googleMapsUri)) {
+      await launchUrl(googleMapsUri, mode: LaunchMode.externalApplication);
+    } else {
+      final Uri webUri =
+          Uri.parse("https://www.google.com/maps/search/?api=1&query=Egypt");
+      await launchUrl(webUri, mode: LaunchMode.externalApplication);
     }
   }
 }

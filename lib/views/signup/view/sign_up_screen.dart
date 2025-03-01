@@ -57,6 +57,7 @@ class SignUpScreen extends StatelessWidget {
                     filled: true,
                     hintText: "الاسم",
                     hintStyle: TextStyle(
+                      fontSize: 12,
                       color: Colors.blueGrey,
                     ),
                     border: OutlineInputBorder(
@@ -81,6 +82,7 @@ class SignUpScreen extends StatelessWidget {
                     filled: true,
                     hintText: "البريد الالكتروني",
                     hintStyle: TextStyle(
+                      fontSize: 12,
                       color: Colors.blueGrey,
                     ),
                     border: OutlineInputBorder(
@@ -105,9 +107,7 @@ class SignUpScreen extends StatelessWidget {
                     fillColor: Colors.white,
                     filled: true,
                     hintText: "كلمة المرور",
-                    hintStyle: TextStyle(
-                      color: Colors.blueGrey,
-                    ),
+                    hintStyle: TextStyle(color: Colors.blueGrey, fontSize: 12),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide:
@@ -128,7 +128,7 @@ class SignUpScreen extends StatelessWidget {
                   Get.to(() => LoginScreen());
                 },
                 child: Container(
-                  width: 200,
+                  width: 160,
                   height: 60,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(

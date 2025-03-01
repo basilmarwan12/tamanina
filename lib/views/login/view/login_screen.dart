@@ -104,8 +104,8 @@ class LoginScreen extends StatelessWidget {
                   } else {}
                 },
                 child: Container(
-                  width: 200.w,
-                  height: 60.h,
+                  width: 160,
+                  height: 60,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: const Color(0xffA8BDD2),

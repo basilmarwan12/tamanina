@@ -36,7 +36,9 @@ class _EmergencyViewState extends State<EmergencyView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text("🚑 فيديو الطوارئ"),
         centerTitle: true,
       ),

@@ -7,9 +7,10 @@ class SomeInformationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         forceMaterialTransparency: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () => Navigator.of(context).pop(),
           child: Container(
