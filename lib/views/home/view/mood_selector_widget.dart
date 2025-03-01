@@ -35,6 +35,11 @@ class MoodSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Text("كيف حالك الان ؟",
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.sp)),
         SizedBox(height: 20.h),
         Obx(
           () => AnimatedSwitcher(

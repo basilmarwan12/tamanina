@@ -26,10 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<String> image = [
     "assets/hospital.png",
-    "assets/note.png",
+    "assets/book.png",
     "assets/greenpill.png",
     "assets/emarg.png",
-    "assets/book.png",
+    "assets/education.png",
     "assets/inform.png",
   ];
 
@@ -204,13 +204,15 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20.h,
             ),
             Container(
+              width: 300.w,
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               decoration: BoxDecoration(
                 color: Colors.white,
+                border: Border.all(color: Colors.amber, width: 1.w),
                 borderRadius: BorderRadius.circular(25.r),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: Colors.grey.withOpacity(0.9),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: Offset(0, 3),

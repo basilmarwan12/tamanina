@@ -14,6 +14,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xffECEFF5),
       appBar: AppBar(
         backgroundColor: const Color(0xffECEFF5),
@@ -27,110 +28,113 @@ class LoginScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 10.h),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Image(
-              image: AssetImage("assets/main_image.png"),
-              width: 500,
-              height: 400,
-            ),
-            Text(
-              "اهلا بعودتك",
-              style: TextStyle(fontSize: 30, color: Colors.black),
-            ),
-            SizedBox(
-              height: 14.h,
-            ),
-            TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              textDirection: TextDirection.rtl,
-              style: TextStyle(color: Colors.black),
-              textAlign: TextAlign.right,
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  hintText: "البريد الالكتروني",
-                  hintStyle: TextStyle(
-                    color: Colors.blueGrey,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 10.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Image(
+                image: AssetImage("assets/main_image.png"),
+                width: 500,
+                height: 400,
+              ),
+              Text(
+                "مرحباً بعودتك",
+                style: TextStyle(fontSize: 30, color: Colors.black),
+              ),
+              SizedBox(
+                height: 14.h,
+              ),
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                textDirection: TextDirection.rtl,
+                style: TextStyle(color: Colors.black),
+                textAlign: TextAlign.right,
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    hintText: "البريد الالكتروني",
+                    hintStyle: TextStyle(
+                      fontSize: 12,
+                      color: Colors.blueGrey,
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide:
+                            BorderSide(color: Color(0xff000000), width: 2)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: Colors.green))),
+              ),
+              SizedBox(
+                height: 14.h,
+              ),
+              TextFormField(
+                controller: _passwordController,
+                keyboardType: TextInputType.visiblePassword,
+                textDirection: TextDirection.rtl,
+                textAlign: TextAlign.right,
+                obscureText: true,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    hintText: "كلمة المرور",
+                    hintStyle: TextStyle(fontSize: 12, color: Colors.blueGrey),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide:
+                            BorderSide(color: Color(0xff000000), width: 2)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: Colors.green))),
+              ),
+              SizedBox(
+                height: 17.h,
+              ),
+              GestureDetector(
+                onTap: () async {
+                  if (await _loginController.login(
+                      email: _emailController.text,
+                      password: _passwordController.text)) {
+                    Get.offAll(() => HomeScreen());
+                  } else {}
+                },
+                child: Container(
+                  width: 200.w,
+                  height: 60.h,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: const Color(0xffA8BDD2),
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(25)),
+                  child: Obx(
+                    () => _loginController.isLoading()
+                        ? SizedBox(
+                            height: 25,
+                            width: 25,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor: Colors.blueGrey,
+                              strokeWidth: 1.5,
+                            ),
+                          )
+                        : Text(
+                            "تسجيل الدخول",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 25.sp,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
                   ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide:
-                          BorderSide(color: Color(0xff000000), width: 2)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(color: Colors.green))),
-            ),
-            SizedBox(
-              height: 14.h,
-            ),
-            TextFormField(
-              controller: _passwordController,
-              keyboardType: TextInputType.visiblePassword,
-              textDirection: TextDirection.rtl,
-              textAlign: TextAlign.right,
-              obscureText: true,
-              style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  hintText: "كلمة المرور",
-                  hintStyle: TextStyle(color: Colors.blueGrey),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide:
-                          BorderSide(color: Color(0xff000000), width: 2)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(color: Colors.green))),
-            ),
-            SizedBox(
-              height: 17.h,
-            ),
-            GestureDetector(
-              onTap: () async {
-                if (await _loginController.login(
-                    email: _emailController.text,
-                    password: _passwordController.text)) {
-                  Get.offAll(() => HomeScreen());
-                } else {}
-              },
-              child: Container(
-                width: 200.w,
-                height: 60.h,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: const Color(0xffA8BDD2),
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(25)),
-                child: Obx(
-                  () => _loginController.isLoading()
-                      ? SizedBox(
-                          height: 25,
-                          width: 25,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            backgroundColor: Colors.blueGrey,
-                            strokeWidth: 1.5,
-                          ),
-                        )
-                      : Text(
-                          "تسجيل الدخول",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 25.sp,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -93,6 +93,7 @@ class _NawpatDetailsScreenState extends State<NawpatDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         forceMaterialTransparency: false,
         backgroundColor: Colors.transparent,

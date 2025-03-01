@@ -12,6 +12,7 @@ class NawpatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         forceMaterialTransparency: false,
         backgroundColor: Colors.transparent,
@@ -106,9 +107,14 @@ class NawpatScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    IconButton(onPressed:(){
-                      nawpatController.deleteNawpat(nawpat.id);
-                    },icon:Icon(Icons.delete,color: Colors.red,) ),
+                    IconButton(
+                        onPressed: () {
+                          nawpatController.deleteNawpat(nawpat.id);
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        )),
                     _buildInfoRow("👤 الاسم:", nawpat.name),
                     _buildInfoRow("⏰ الوقت:", nawpat.date.substring(11, 16)),
                   ],
