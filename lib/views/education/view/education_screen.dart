@@ -153,7 +153,7 @@ class EducationScreen extends StatelessWidget {
       buttonColor: Colors.red,
       onConfirm: () async {
         await _controller.deleteEducation(educationId);
-        Get.back(closeOverlays: true);
+        Get.back();
       },
     );
   }
