@@ -38,8 +38,8 @@ class EducationController extends GetxController {
   }
 
   Future<bool> addEducation(String date, String notes) async {
-    isLoading.value = true;
     try {
+      isLoading(true);
       DocumentReference docRef = await FirebaseFirestore.instance
           .collection("education")
           .add({
@@ -51,12 +51,14 @@ class EducationController extends GetxController {
       await scheduleEducationNotification(docRef.id, notes, date);
 
       Get.snackbar("نجاح", "تمت إضافة التذكير الدراسي بنجاح!");
+      await fetchEducations(FirebaseAuth.instance.currentUser!.uid);
+
       return true;
     } catch (e) {
       Get.snackbar("خطأ", "حدث خطأ أثناء إضافة التذكير الدراسي: $e");
       return false;
     } finally {
-      isLoading.value = false;
+      isLoading(false);
     }
   }
 
