@@ -31,7 +31,7 @@ class EducationController extends GetxController {
       Get.snackbar("نجاح", "تم حذف الدواء بنجاح!");
       await fetchEducations(FirebaseAuth.instance.currentUser!.uid);
     } catch (e) {
-      Get.snackbar("خطأ", "فشل حذف الدواء: $e");
+      // Get.snackbar("خطأ", "فشل حذف الدواء: $e");
     } finally {
       isLoading.value = false;
     }
@@ -55,7 +55,7 @@ class EducationController extends GetxController {
 
       return true;
     } catch (e) {
-      Get.snackbar("خطأ", "حدث خطأ أثناء إضافة التذكير الدراسي: $e");
+      // Get.snackbar("خطأ", "حدث خطأ أثناء إضافة التذكير الدراسي: $e");
       return false;
     } finally {
       isLoading(false);
@@ -117,7 +117,7 @@ class EducationController extends GetxController {
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar("خطأ", "فشل تحميل بيانات التذكيرات الدراسية: $e");
+      // Get.snackbar("خطأ", "فشل تحميل بيانات التذكيرات الدراسية: $e");
     }
   }
 
@@ -208,8 +208,8 @@ class EducationController extends GetxController {
     } catch (e) {
       print("❌ خطأ في جدولة التذكير الدراسي: $e");
 
-      Get.snackbar("خطأ", "حدثت مشكلة أثناء جدولة التذكير الدراسي: $e",
-          snackPosition: SnackPosition.BOTTOM);
+      // Get.snackbar("خطأ", "حدثت مشكلة أثناء جدولة التذكير الدراسي: $e",
+      //     snackPosition: SnackPosition.BOTTOM);
     }
   }
 

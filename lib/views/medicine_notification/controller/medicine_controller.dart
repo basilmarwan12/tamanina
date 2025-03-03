@@ -206,8 +206,8 @@ class MedicineController extends GetxController {
     } catch (e) {
       print("❌ خطأ في جدولة الإشعار: $e");
 
-      Get.snackbar("خطأ", "حدثت مشكلة أثناء جدولة التذكير: $e",
-          snackPosition: SnackPosition.BOTTOM);
+      // Get.snackbar("خطأ", "حدثت مشكلة أثناء جدولة التذكير: $e",
+      //     snackPosition: SnackPosition.BOTTOM);
     }
   }
 
