@@ -103,7 +103,7 @@ class MedicineScreen extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () {
-                          _showDeleteConfirmationDialog(medicine.id ?? "");
+                          _showDeleteConfirmationDialog(medicine.id);
                         },
                         icon: const Icon(Icons.delete, color: Colors.red),
                       ),
@@ -118,7 +118,9 @@ class MedicineScreen extends StatelessWidget {
                         _buildInfoRow("📌 الاسم", medicine.name),
                         _buildInfoRow(
                           "📅 التاريخ",
-                          medicine.dateTime.toString().substring(0, 10),
+                          medicine.dateTime.length < 5
+                              ? "غير محدد"
+                              : medicine.dateTime.toString().substring(0, 10),
                         ),
                       ],
                     ),
@@ -165,12 +167,14 @@ class MedicineScreen extends StatelessWidget {
       middleText: "هل أنت متأكد أنك تريد حذف هذا الدواء؟",
       textConfirm: "نعم",
       textCancel: "لا",
-      confirmTextColor: Colors.white,
+      titleStyle: TextStyle(color: Colors.black, fontSize: 25.sp),
+      middleTextStyle: TextStyle(color: Colors.black, fontSize: 20.sp),
+      confirmTextColor: Colors.black,
       cancelTextColor: Colors.black,
       buttonColor: Colors.red,
       onConfirm: () async {
         await _medicineController.deleteMedicine(medicineId);
-        Get.back();
+        Get.back(canPop: true);
       },
     );
   }

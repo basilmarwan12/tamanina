@@ -237,11 +237,19 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Text("الإشعارات",
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black)),
             Divider(),
             Expanded(
               child: Obx(() => homeController.notificationList.isEmpty
-                  ? Center(child: Text("لا توجد إشعارات"))
+                  ? Center(
+                      child: Text(
+                        "لا توجد إشعارات",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    )
                   : ListView.builder(
                       itemCount: homeController.notificationList.length,
                       itemBuilder: (context, index) {

@@ -45,11 +45,11 @@ class NawpatController extends GetxController {
       Get.snackbar("خطأ", "فشل تحميل بيانات النوبات: $e");
     }
   }
-  
+
   Future<void> deleteNawpat(String id) async {
     try {
       isLoading.value = true;
-
+      nawpatList.removeWhere((nawpat) => nawpat.id == id);
       await firestore.collection('nawpat').doc(id).delete();
 
       isLoading.value = false;
@@ -60,15 +60,13 @@ class NawpatController extends GetxController {
       Get.snackbar("خطأ", "فشل حذف النوبة: $e");
     }
   }
-  
+
   Future<void> editNawpat(String id, Map<String, dynamic> updatedData) async {
     try {
       isLoading.value = true;
 
-      // Update the document in Firestore
       await firestore.collection('nawpat').doc(id).update(updatedData);
-      
-      // Refresh the nawpat list to reflect changes
+
       await fetchNawpatData(FirebaseAuth.instance.currentUser!.uid);
 
       isLoading.value = false;
@@ -107,11 +105,12 @@ class NawpatController extends GetxController {
 
       await docRef.update({'id': docRef.id});
 
-      isLoading.value = false;
       Get.snackbar('نجاح', 'تمت إضافة البيانات بنجاح',
           backgroundColor: Colors.green);
 
       clearFields();
+      await fetchNawpatData(FirebaseAuth.instance.currentUser!.uid);
+      isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
       print(e);

@@ -73,7 +73,10 @@ class NawpatScreen extends StatelessWidget {
           return const Center(
             child: Text(
               "لا توجد بيانات متاحة",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
           );
         }

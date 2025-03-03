@@ -83,10 +83,8 @@ class MedicineController extends GetxController {
         ])
       });
 
-      // cancel previous notification
       await flutterLocalNotificationsPlugin.cancel(id.hashCode);
 
-      // schedule new notification
       await scheduleMedicineNotification(id, name, date);
 
       Get.snackbar("Success", "Medicine updated successfully!");
