@@ -104,7 +104,7 @@ class LoginScreen extends StatelessWidget {
                   } else {}
                 },
                 child: Container(
-                  width: 160,
+                  width: 180,
                   height: 60,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(

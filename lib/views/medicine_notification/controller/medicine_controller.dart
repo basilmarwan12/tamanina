@@ -35,10 +35,8 @@ class MedicineController extends GetxController {
 
       await scheduleMedicineNotification(docRef.id, name, date);
 
-      Get.snackbar("Success", "Medicine added successfully!");
       return true;
     } catch (e) {
-      Get.snackbar("Error", "Something went wrong: $e");
       return false;
     } finally {
       isLoading.value = false;
