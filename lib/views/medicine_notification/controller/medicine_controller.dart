@@ -153,17 +153,47 @@ class MedicineController extends GetxController {
     return false;
   }
 
+  Future<bool> requestNotificationPermission() async {
+    if (Platform.isAndroid) {
+      if (await Permission.notification.isGranted) {
+        print("🔔 إذن الإشعارات مفعّل بالفعل.");
+        return true;
+      }
+
+      final PermissionStatus status = await Permission.notification.request();
+
+      if (status.isGranted) {
+        print("✅ تم منح إذن الإشعارات.");
+        return true;
+      } else {
+        print("❌ إذن الإشعارات مرفوض.");
+        Get.snackbar(
+          "خطأ",
+          "يرجى منح إذن الإشعارات لضمان تلقي التذكيرات",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return false;
+      }
+    }
+    return true;
+  }
+
   Future<void> scheduleMedicineNotification(
       String id, String name, String date) async {
     try {
       print(date);
-      bool granted = await requestExactAlarmPermission();
-      if (!granted) {
-        print("❌ لا يمكن جدولة التنبيه بدون إذن التنبيه الدقيق!");
-        Get.snackbar("خطأ", "يجب منح إذن التنبيه الدقيق لجدولة الإشعارات",
+
+      bool notificationsGranted = await requestNotificationPermission();
+      bool exactAlarmGranted = await requestExactAlarmPermission();
+
+      if (!notificationsGranted || !exactAlarmGranted) {
+        print("❌ لا يمكن جدولة التنبيه بدون الأذونات المطلوبة!");
+        Get.snackbar("خطأ",
+            "يجب منح إذن التنبيه الدقيق وإشعارات النظام لجدولة التذكيرات",
             snackPosition: SnackPosition.BOTTOM);
         return;
       }
+
       DateTime scheduledTime = DateTime.parse(date);
       final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
       tz.TZDateTime tzScheduledTime =
@@ -178,8 +208,11 @@ class MedicineController extends GetxController {
         tzScheduledTime = now.add(Duration(seconds: 10));
       }
 
+      int notificationId =
+          DateTime.now().millisecondsSinceEpoch.remainder(100000);
+
       await flutterLocalNotificationsPlugin.zonedSchedule(
-        id.hashCode,
+        notificationId,
         "💊 تذكير بالدواء",
         "🕒 حان وقت تناول الدواء: $name",
         tzScheduledTime,
@@ -197,6 +230,7 @@ class MedicineController extends GetxController {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         androidScheduleMode: AndroidScheduleMode.alarmClock,
+        matchDateTimeComponents: DateTimeComponents.time,
       );
 
       print("✅ تم ضبط الإشعار للدواء في (التوقيت المحلي): $tzScheduledTime");
@@ -205,7 +239,6 @@ class MedicineController extends GetxController {
           snackPosition: SnackPosition.TOP);
     } catch (e) {
       print("❌ خطأ في جدولة الإشعار: $e");
-
       // Get.snackbar("خطأ", "حدثت مشكلة أثناء جدولة التذكير: $e",
       //     snackPosition: SnackPosition.BOTTOM);
     }

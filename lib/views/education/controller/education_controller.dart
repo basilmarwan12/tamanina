@@ -31,7 +31,6 @@ class EducationController extends GetxController {
       Get.snackbar("نجاح", "تم حذف الدواء بنجاح!");
       await fetchEducations(FirebaseAuth.instance.currentUser!.uid);
     } catch (e) {
-      // Get.snackbar("خطأ", "فشل حذف الدواء: $e");
     } finally {
       isLoading.value = false;
     }
@@ -55,7 +54,6 @@ class EducationController extends GetxController {
 
       return true;
     } catch (e) {
-      // Get.snackbar("خطأ", "حدث خطأ أثناء إضافة التذكير الدراسي: $e");
       return false;
     } finally {
       isLoading(false);
@@ -84,12 +82,6 @@ class EducationController extends GetxController {
         ])
       });
 
-      // // cancel previous notification
-      // await flutterLocalNotificationsPlugin.cancel(id.hashCode);
-
-      // // schedule new notification
-      // await scheduleEducationNotification(id, notes, date);
-
       Get.snackbar("Success", "Education updated successfully!");
       await fetchEducations(FirebaseAuth.instance.currentUser!.uid);
       return true;
@@ -117,7 +109,6 @@ class EducationController extends GetxController {
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
-      // Get.snackbar("خطأ", "فشل تحميل بيانات التذكيرات الدراسية: $e");
     }
   }
 
@@ -153,16 +144,43 @@ class EducationController extends GetxController {
     return false;
   }
 
+  Future<bool> requestNotificationPermission() async {
+    if (Platform.isAndroid) {
+      if (await Permission.notification.isGranted) {
+        print("🔔 إذن الإشعارات مفعّل بالفعل.");
+        return true;
+      }
+
+      final PermissionStatus status = await Permission.notification.request();
+
+      if (status.isGranted) {
+        print("✅ تم منح إذن الإشعارات.");
+        return true;
+      } else {
+        print("❌ إذن الإشعارات مرفوض.");
+        Get.snackbar(
+          "خطأ",
+          "يرجى منح إذن الإشعارات لضمان تلقي التذكيرات",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return false;
+      }
+    }
+    return true;
+  }
+
   Future<void> scheduleEducationNotification(
       String id, String title, String date) async {
     try {
       print("📅 تاريخ التذكير الدراسي: $date");
 
-      bool granted = await requestExactAlarmPermission();
-      if (!granted) {
-        print("❌ لا يمكن جدولة التذكير بدون إذن التنبيه الدقيق!");
-        Get.snackbar(
-            "خطأ", "يجب منح إذن التنبيه الدقيق لجدولة التذكيرات الدراسية",
+      bool notificationsGranted = await requestNotificationPermission();
+      bool exactAlarmGranted = await requestExactAlarmPermission();
+
+      if (!notificationsGranted || !exactAlarmGranted) {
+        print("❌ لا يمكن جدولة التذكير بدون الأذونات المطلوبة!");
+        Get.snackbar("خطأ",
+            "يجب منح إذن التنبيه الدقيق وإشعارات النظام لجدولة التذكيرات الدراسية",
             snackPosition: SnackPosition.BOTTOM);
         return;
       }
@@ -180,8 +198,11 @@ class EducationController extends GetxController {
         tzScheduledTime = now.add(Duration(seconds: 10));
       }
 
+      int notificationId =
+          DateTime.now().millisecondsSinceEpoch.remainder(100000);
+
       await flutterLocalNotificationsPlugin.zonedSchedule(
-        id.hashCode,
+        notificationId,
         "📚 تذكير دراسي",
         "🕒 لديك تذكير دراسي: $title",
         tzScheduledTime,
@@ -207,7 +228,6 @@ class EducationController extends GetxController {
           snackPosition: SnackPosition.TOP);
     } catch (e) {
       print("❌ خطأ في جدولة التذكير الدراسي: $e");
-
       // Get.snackbar("خطأ", "حدثت مشكلة أثناء جدولة التذكير الدراسي: $e",
       //     snackPosition: SnackPosition.BOTTOM);
     }
